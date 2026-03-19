@@ -1,0 +1,76 @@
+
+
+.status-nav {
+  margin-bottom: 15px;
+}
+
+.status-nav button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #eee;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.status-nav button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.invoice-table th,
+.invoice-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+
+.invoice-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.invoice-table tr:hover {
+  background-color: #ddd;
+}
+
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.status-completed {
+  background-color: #d4edda; 
+  color: #155724;           
+}
+
+.status-pending {
+  background-color: #fcf0c7; 
+  color: #856404;           
+}
+
+.status-failed {
+  background-color: #f8d7da; 
+  color: #721c24;           
+}
+
+.p-print-btn{
+  background: #2563eb;
+  color: red;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}

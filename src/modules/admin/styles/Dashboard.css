@@ -1,0 +1,253 @@
+/* 
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.sidebar {
+    width: 260px;
+    background-color: #1e3a8a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-header {
+    padding: 24px;
+}
+
+.sidebar-header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.sidebar-header p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #93c5fd;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 16px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    color: #dbeafe;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.3s;
+}
+
+.nav-item:hover {
+    background-color: #1d4ed8;
+}
+
+.nav-item.active {
+    background-color: #2563eb;
+    color: white;
+}
+
+.logout-btn {
+    margin: 16px;
+    padding: 12px;
+    background: none;
+    border: 1px solid #ef4444;
+    color: #fca5a5;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-header {
+    height: 64px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+}
+
+.search-input {
+    background: #f1f5f9;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    width: 300px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: #2563eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.page-body {
+    padding: 32px;
+}
+
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.sidebar-header {
+    padding: 24px;
+    text-align: center; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px auto; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    background: white; 
+    border: 2px solid rgba(255, 255, 255, 0.2); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.sidebar-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.sidebar-header h1 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: white;
+}
+
+.sidebar-header p {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 4px;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.logo-icon {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.logo-text h1 {
+    font-size: 1.25rem;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+
+.user-info {
+    text-align: right;
+}
+
+.user-name {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.status-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.status-text {
+    font-size: 11px;
+    font-weight: 500;
+    color: #22c55e; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+.avatar-wrapper {
+    position: relative;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border: 2px solid #fff;
+    border-radius: 50%;
+} */

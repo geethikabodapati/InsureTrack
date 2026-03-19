@@ -1,0 +1,216 @@
+:root {
+  --primary: #030213;
+  --accent-blue: #2563eb;
+  --bg-input: #f3f3f5;
+  --text-muted: #717182;
+  --radius: 0.625rem;
+  --border: rgba(0, 0, 0, 0.1);
+}
+
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+}
+
+/* Left Pane - Brand & Info */
+.info-pane {
+  flex: 1.2;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+}
+
+.brand-badge {
+  background: var(--accent-blue);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  width: fit-content;
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+.info-content h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+  margin-bottom: 15px;
+  margin-left: 50px;
+}
+
+.info-content p {
+  color: var(--text);
+  font-size: 1.0rem;
+  max-width: 590px;
+  margin-bottom: 35px;
+  margin-left: 50px;
+}
+
+.hero-image {
+  width: 100%;
+  height: 250px;
+  background-image: url("../../public/Insuretrack.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius);
+}
+
+.stats-row {
+  display: flex;
+  gap: 120px;
+  margin-left: 50px;
+  margin-top: auto;
+  padding-top: 30px;
+}
+
+.stat-item h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin: 0;
+}
+
+.stat-item p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Right Pane - Forms */
+.form-pane {
+  flex: 1;
+  background-color: #f8faff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: white;
+  padding: 40px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  background: #d6f1ef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+}
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--primary);
+}
+
+.input-group input, .input-group select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg-input);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: var(--accent-blue);
+  background: white;
+  outline: none;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.error-msg {
+  color: #d4183d;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between checkbox and text */
+    cursor: pointer;
+    color: #64748b;
+}
+ 
+/* Overriding your global input style for ONLY the checkbox */
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0; /* Removes that large 20px bottom margin from your global CSS */
+    cursor: pointer;
+}
+ 
+.forgot-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+ 
+.forgot-link:hover {
+    text-decoration: underline;
+}
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px; /* Spacing before the Sign In button */
+    font-size: 14px;
+}
