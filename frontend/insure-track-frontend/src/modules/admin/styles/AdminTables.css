@@ -1,0 +1,760 @@
+/* Table Page Container */
+.table-container {
+    padding: 24px;
+}
+ 
+.table-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+ 
+.table-title h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+ 
+.table-title p {
+    color: #6b7280;
+    margin: 4px 0 0 0;
+}
+ 
+.add-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+ 
+/* Table Card */
+.table-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+ 
+.search-bar-container {
+    padding: 16px;
+    border-bottom: 1px solid #f3f4f6;
+}
+ 
+.search-wrapper {
+    position: relative;
+    width: 300px;
+}
+ 
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+ 
+.search-input-field {
+    width: 100%;
+    padding: 8px 12px 8px 40px;
+    background-color: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+ 
+/* Real Table Styling */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+ 
+.data-table thead {
+    background-color: #f9fafb;
+}
+ 
+.data-table th {
+    padding: 12px 24px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+ 
+.data-table td {
+    padding: 16px 24px;
+    font-size: 14px;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+}
+ 
+/* Status Badges */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+}
+ 
+.status-active {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+ 
+.status-inactive {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+ 
+.action-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 450px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.modal-subtext { color: #666; font-size: 14px; margin-bottom: 20px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+.form-group select, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-confirm { background: #4f46e5; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+/* Container and Layout */
+.table-container {
+    padding: 2rem;
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+ 
+.table-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+ 
+.table-title h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+ 
+.table-title p {
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+ 
+/* Add Rule Button */
+.add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #2563eb;
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+ 
+.add-btn:hover {
+    background-color: #1d4ed8;
+}
+ 
+/* Card and Search */
+.table-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+}
+ 
+.search-bar-container {
+    padding: 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+ 
+.search-wrapper {
+    position: relative;
+    max-width: 400px;
+}
+ 
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+ 
+.search-input-field {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    background-color: #f1f5f9;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    outline: none;
+}
+ 
+.search-input-field:focus {
+    background-color: white;
+    border-color: #2563eb;
+}
+ 
+/* Data Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+ 
+.data-table th {
+    background-color: white;
+    padding: 1rem 1.25rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+}
+ 
+.data-table td {
+    padding: 1rem 1.25rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+}
+ 
+.data-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+ 
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+ 
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(4px);
+}
+ 
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 1rem;
+    padding: 2rem;
+    position: relative;
+}
+ 
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+ 
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+ 
+.form-group {
+    margin-bottom: 1.25rem;
+}
+ 
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 0.5rem;
+}
+ 
+.form-group input {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    outline: none;
+}
+ 
+.form-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+ 
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+ 
+.btn-cancel {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+ 
+.btn-confirm {
+    padding: 0.625rem 1.25rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+/* Container and Layout */
+.table-container {
+    padding: 2rem;
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+ 
+.table-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+ 
+.table-title h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+ 
+.table-title p {
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+ 
+/* Primary Action Button */
+.add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #2563eb;
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+ 
+.add-btn:hover {
+    background-color: #1d4ed8;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+ 
+/* Card and Search Wrapper */
+.table-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+ 
+.search-bar-container {
+    padding: 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+ 
+.search-wrapper {
+    position: relative;
+    max-width: 400px;
+}
+ 
+.search-icon {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+ 
+.search-input-field {
+    width: 100%;
+    padding: 0.625rem 1rem 0.625rem 2.75rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+ 
+.search-input-field:focus {
+    background-color: white;
+    border-color: #3b82f6;
+}
+ 
+/* Data Table Styling */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+ 
+.data-table th {
+    background-color: #f8fafc;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 700;
+    border-bottom: 1px solid #e2e8f0;
+}
+ 
+.data-table td {
+    padding: 1.25rem 1.5rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.925rem;
+}
+ 
+.data-table tbody tr:hover {
+    background-color: #fbfcfd;
+}
+ 
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+ 
+.status-active {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+ 
+.status-inactive {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+ 
+.action-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+ 
+.action-btn:hover {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+ 
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+ 
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+ 
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+ 
+.modal-subtext {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+ 
+.form-group {
+    margin-bottom: 1.25rem;
+}
+ 
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.5rem;
+}
+ 
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    outline: none;
+}
+ 
+.form-group input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+ 
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+ 
+.btn-cancel {
+    padding: 0.625rem 1.25rem;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+}
+ 
+.btn-confirm {
+    padding: 0.625rem 1.25rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+/* --- New Role-Based Badge Colors --- */
+ 
+.role-admin {
+    background-color: #f3e8ff; /* Light purple */
+    color: #9333ea;           /* Dark purple */
+}
+ 
+.role-manager {
+    background-color: #e0f2fe; /* Light blue */
+    color: #2563eb;           /* Dark blue */
+}
+ 
+.role-analyst {
+    background-color: #ccfbf1; /* Light teal */
+    color: #0d9488;           /* Dark teal */
+}
+ 
+.role-customer {
+    background-color: #dcfce7; /* Light green */
+    color: #16a34a;           /* Dark green */
+}
+ 
+.role-agent {
+    background-color: #fef9c3; /* Light yellow */
+    color: #ca8a04;           /* Dark yellow/orange */
+}
+ 
+.role-default {
+    background-color: #f1f5f9; /* Light gray */
+    color: #475569;           /* Dark gray */
+}
+.badge-create { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+.badge-update { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+.badge-delete { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+.badge-default { background: #f1f5f9; color: #475569; }
+ 
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+/* Action Dropdown Styling */
+.action-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+}
+ 
+.action-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #374151;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+ 
+.action-dropdown button:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+}
+ 
+.action-dropdown svg {
+    color: #6b7280;
+}
+/* Ensure the container doesn't clip the dropdown */
+.table-card {
+    overflow: visible !important;
+    padding-bottom: 50px; /* Gives extra space for the last row's menu */
+}
+ 
+/* Ensure the table itself allows the menu to pop out */
+.data-table {
+    border-collapse: separate; /* Required for some overflow behaviors */
+}
+ 
+/* If you want the menu to open UPWARD for the last few rows */
+tr:last-child .action-dropdown,
+tr:nth-last-child(2) .action-dropdown {
+    bottom: 100%;
+    top: auto;
+    margin-bottom: 5px;
+}
+/* Dark Mode Definitions */
+[data-theme='dark'] {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-color: #f8fafc;
+}
+ 
+[data-theme='dark'] body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+ 
+[data-theme='dark'] .table-card {
+    background-color: var(--card-bg);
+    border-color: #334155;
+}
+ 
+[data-theme='dark'] .sidebar {
+    background-color: #020617;
+}
+/* LIGHT THEME VARIABLES (Default) */
+:root {
+    --bg-main: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --sidebar-bg: #1e3a8a; /* Your original blue */
+}
+ 
+/* DARK THEME VARIABLES (Everything Black) */
+[data-theme='dark'] {
+    --bg-main: #000000;      /* Pure black background */
+    --card-bg: #111111;      /* Deep black cards */
+    --text-main: #ffffff;    /* White text */
+    --text-muted: #94a3b8;   /* Light gray text */
+    --sidebar-bg: #000000;   /* Black sidebar */
+}
+.page-nav-btn, .page-num-btn {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+ 
+.page-nav-btn:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+ 
+.page-num-btn.active {
+    background-color: #eee;
+    font-weight: bold;
+    border-color: #999;
+}
+ 
+.page-num-btn:hover:not(.active) {
+    background-color: #f9f9f9;
+}
