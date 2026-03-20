@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { DollarSign, AlertCircle, RefreshCw } from "lucide-react";
-import { reservesApi, claimsApi } from "../../../services/api";
+import { reservesApi, claimsApi } from "../../../core/services/api";
 
 export function Reserves() {
-  const [claims, setClaims]       = useState([]);
-  const [selected, setSelected]   = useState(null);
-  const [reserves, setReserves]   = useState([]);
-  const [amount, setAmount]       = useState("");
-  const [toast, setToast]         = useState(null);
-  const [loading, setLoading]     = useState(false);
-  const [fetching, setFetching]   = useState(false);
+  const [claims, setClaims] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [reserves, setReserves] = useState([]);
+  const [amount, setAmount] = useState("");
+  const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   const showToast = (type, text) => { setToast({ type, text }); setTimeout(() => setToast(null), 3000); };
 
@@ -20,7 +20,7 @@ export function Reserves() {
     try {
       const res = await claimsApi.getAll();
       // Show all claims except OPEN/DENIED
-      const relevant = (res.data || []).filter(c => ["INVESTIGATING","SETTLED","CLOSED"].includes(c.status));
+      const relevant = (res.data || []).filter(c => ["INVESTIGATING", "SETTLED", "CLOSED"].includes(c.status));
       setClaims(relevant);
       if (relevant.length > 0) selectClaim(relevant[0]);
     } catch (err) {
@@ -34,7 +34,7 @@ export function Reserves() {
     try {
       const res = await reservesApi.getByClaim(c.claimId);
       setReserves(Array.isArray(res.data) ? res.data : []);
-    } catch (_) {}
+    } catch (_) { }
   };
 
   useEffect(() => { loadClaims(); }, []);
@@ -56,8 +56,8 @@ export function Reserves() {
 
   const STATUS_BADGE = {
     INVESTIGATING: "bg-yellow-100 text-yellow-800",
-    SETTLED:       "bg-green-100 text-green-800",
-    CLOSED:        "bg-gray-100 text-gray-700",
+    SETTLED: "bg-green-100 text-green-800",
+    CLOSED: "bg-gray-100 text-gray-700",
   };
 
   return (
@@ -74,9 +74,8 @@ export function Reserves() {
       </div>
 
       {toast && (
-        <div className={`border rounded-lg p-4 mb-5 flex items-center gap-3 text-sm ${
-          toast.type === "success" ? "bg-green-50 border-green-200 text-green-900" : "bg-red-50 border-red-200 text-red-900"
-        }`}>
+        <div className={`border rounded-lg p-4 mb-5 flex items-center gap-3 text-sm ${toast.type === "success" ? "bg-green-50 border-green-200 text-green-900" : "bg-red-50 border-red-200 text-red-900"
+          }`}>
           <AlertCircle className="w-4 h-4 flex-shrink-0" />{toast.text}
         </div>
       )}
@@ -101,9 +100,8 @@ export function Reserves() {
             <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
               {claims.map(c => (
                 <button key={c.claimId} onClick={() => selectClaim(c)}
-                  className={`w-full text-left px-5 py-4 transition-colors ${
-                    selected?.claimId === c.claimId ? "bg-blue-50 border-l-4 border-l-blue-600" : "hover:bg-gray-50"
-                  }`}>
+                  className={`w-full text-left px-5 py-4 transition-colors ${selected?.claimId === c.claimId ? "bg-blue-50 border-l-4 border-l-blue-600" : "hover:bg-gray-50"
+                    }`}>
                   <div className="flex justify-between items-start mb-1">
                     <p className="text-sm font-bold text-gray-900">#{c.claimId}</p>
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_BADGE[c.status] || "bg-gray-100 text-gray-700"}`}>{c.status}</span>
@@ -164,7 +162,7 @@ export function Reserves() {
                   <table className="w-full text-sm">
                     <thead className="bg-gray-50 border-b border-gray-100">
                       <tr>
-                        {["Reserve ID","Amount","Created Date","Status"].map(h => (
+                        {["Reserve ID", "Amount", "Created Date", "Status"].map(h => (
                           <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
                         ))}
                       </tr>

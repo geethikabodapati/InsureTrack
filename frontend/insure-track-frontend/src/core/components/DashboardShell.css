@@ -1,0 +1,525 @@
+/* ============================================================
+   InsureTrack — DashboardShell Layout
+   Used by all role-based dashboards
+   ============================================================ */
+
+/* --- App Shell --- */
+.it-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--it-bg);
+  font-family: var(--it-font);
+}
+
+/* --- Sidebar --- */
+.it-sidebar {
+  width: var(--it-sidebar-width);
+  background: var(--it-bg-card);
+  border-right: 1px solid var(--it-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.it-sidebar.collapsed {
+  width: 68px;
+}
+
+/* --- Sidebar Brand --- */
+.it-sidebar-brand {
+  height: var(--it-header-height);
+  padding: 0 var(--it-space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-3);
+  border-bottom: 1px solid var(--it-border);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.it-brand-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--it-primary) 0%, var(--it-accent) 100%);
+  border-radius: var(--it-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
+}
+
+.it-brand-text {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.it-brand-name {
+  display: block;
+  font-size: var(--it-font-size-base);
+  font-weight: 800;
+  color: var(--it-text-primary);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.it-brand-tagline {
+  display: block;
+  font-size: var(--it-font-size-xs);
+  color: var(--it-text-muted);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --- Sidebar Nav --- */
+.it-sidebar-nav {
+  flex: 1;
+  padding: var(--it-space-4) var(--it-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--it-border) transparent;
+}
+
+.it-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-3);
+  padding: 10px var(--it-space-3);
+  border-radius: var(--it-radius-md);
+  text-decoration: none;
+  color: var(--it-text-secondary);
+  font-size: var(--it-font-size-sm);
+  font-weight: 500;
+  transition: var(--it-transition);
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.it-nav-link .it-nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.it-nav-link:hover {
+  background: var(--it-primary-light);
+  color: var(--it-primary);
+}
+
+.it-nav-link.active {
+  background: var(--it-primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
+}
+
+.it-nav-link.active:hover {
+  background: var(--it-primary-hover);
+  color: #FFFFFF;
+}
+
+.it-nav-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Sidebar Footer (Logout) --- */
+.it-sidebar-footer {
+  padding: var(--it-space-4) var(--it-space-3);
+  border-top: 1px solid var(--it-border);
+  flex-shrink: 0;
+}
+
+.it-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-3);
+  padding: 10px var(--it-space-3);
+  border-radius: var(--it-radius-md);
+  color: var(--it-danger);
+  font-size: var(--it-font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: var(--it-transition);
+}
+
+.it-logout-btn:hover {
+  background: var(--it-danger-bg);
+}
+
+/* --- Main Area --- */
+.it-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* --- Header --- */
+.it-header {
+  height: var(--it-header-height);
+  background: var(--it-bg-card);
+  border-bottom: 1px solid var(--it-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--it-space-6);
+  flex-shrink: 0;
+  box-shadow: var(--it-shadow-sm);
+  z-index: 50;
+}
+
+.it-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-4);
+}
+
+.it-collapse-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--it-border);
+  border-radius: var(--it-radius-md);
+  cursor: pointer;
+  color: var(--it-text-secondary);
+  background: none;
+  transition: var(--it-transition);
+  flex-shrink: 0;
+}
+
+.it-collapse-btn:hover {
+  background: var(--it-bg);
+  color: var(--it-primary);
+  border-color: var(--it-accent);
+}
+
+.it-page-name {
+  font-size: var(--it-font-size-sm);
+  font-weight: 700;
+  color: var(--it-text-primary);
+  margin: 0;
+}
+
+.it-breadcrumb {
+  font-size: var(--it-font-size-xs);
+  color: var(--it-text-muted);
+  margin: 0;
+  margin-top: 2px;
+}
+
+.it-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-2);
+}
+
+/* --- Header Icon Button --- */
+.it-icon-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--it-radius-md);
+  cursor: pointer;
+  color: var(--it-text-secondary);
+  background: none;
+  border: none;
+  transition: var(--it-transition);
+}
+
+.it-icon-btn:hover {
+  background: var(--it-bg);
+  color: var(--it-primary);
+}
+
+.it-badge-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background: var(--it-danger);
+  border-radius: 50%;
+  border: 2px solid var(--it-bg-card);
+}
+
+.it-notif-count {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
+  background: var(--it-danger);
+  color: white;
+  border-radius: var(--it-radius-full);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid var(--it-bg-card);
+}
+
+/* --- Separator --- */
+.it-header-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--it-border);
+  margin: 0 var(--it-space-2);
+}
+
+/* --- User Profile in Header --- */
+.it-user-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-3);
+  padding: 6px var(--it-space-3);
+  border-radius: var(--it-radius-lg);
+  cursor: pointer;
+  transition: var(--it-transition);
+  background: none;
+  border: none;
+}
+
+.it-user-chip:hover {
+  background: var(--it-bg);
+}
+
+.it-user-info {
+  text-align: right;
+  line-height: 1;
+}
+
+.it-user-name {
+  display: block;
+  font-size: var(--it-font-size-sm);
+  font-weight: 700;
+  color: var(--it-text-primary);
+}
+
+.it-user-role {
+  display: block;
+  font-size: var(--it-font-size-xs);
+  color: var(--it-text-muted);
+  margin-top: 2px;
+}
+
+.it-avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--it-primary) 0%, var(--it-accent) 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--it-font-size-sm);
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(30, 58, 138, 0.2);
+  position: relative;
+}
+
+.it-online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #22C55E;
+  border-radius: 50%;
+  border: 2px solid var(--it-bg-card);
+}
+
+/* --- Scrollable Content Area --- */
+.it-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--it-bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--it-border) transparent;
+}
+
+/* --- Dark Mode Overrides for Shell --- */
+body.dark .it-shell {
+  background: var(--it-bg);
+}
+
+body.dark .it-sidebar,
+body.dark .it-header {
+  background: var(--it-bg-card);
+  border-color: var(--it-border);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .it-sidebar {
+    width: 220px;
+  }
+  :root {
+    --it-sidebar-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .it-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 200;
+    transform: translateX(0);
+  }
+  .it-sidebar.collapsed {
+    transform: translateX(-100%);
+    width: var(--it-sidebar-width);
+  }
+}
+
+/* --- Chevron Icon --- */
+.it-chevron {
+  color: var(--it-text-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+.it-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* --- User Dropdown --- */
+.it-user-chip {
+  position: relative;
+}
+
+.it-user-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 240px;
+  background: var(--it-bg-card);
+  border: 1px solid var(--it-border);
+  border-radius: var(--it-radius-lg);
+  box-shadow: var(--it-shadow-lg);
+  z-index: 500;
+  padding: var(--it-space-3);
+  animation: it-fadeIn 0.15s ease;
+}
+
+.it-user-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-3);
+  padding: var(--it-space-2) var(--it-space-2) var(--it-space-3);
+}
+
+.it-avatar-lg {
+  width: 44px;
+  height: 44px;
+  font-size: var(--it-font-size-base);
+}
+
+.it-user-dropdown-name {
+  font-size: var(--it-font-size-sm);
+  font-weight: 700;
+  color: var(--it-text-primary);
+  margin: 0;
+}
+
+.it-user-dropdown-role {
+  font-size: var(--it-font-size-xs);
+  color: var(--it-text-muted);
+  margin: 2px 0 0;
+}
+
+.it-dropdown-divider {
+  border: none;
+  border-top: 1px solid var(--it-border);
+  margin: var(--it-space-1) 0;
+}
+
+.it-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--it-space-2);
+  width: 100%;
+  padding: 9px var(--it-space-3);
+  border: none;
+  background: none;
+  border-radius: var(--it-radius-md);
+  font-size: var(--it-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--it-transition);
+  color: var(--it-text-primary);
+}
+
+.it-dropdown-item:hover {
+  background: var(--it-bg);
+}
+
+.it-dropdown-item-danger {
+  color: var(--it-danger);
+}
+
+.it-dropdown-item-danger:hover {
+  background: var(--it-danger-bg);
+}
+
+/* --- Dark Mode Shell Overrides --- */
+body.dark .it-shell {
+  background: var(--it-bg);
+}
+
+body.dark .it-sidebar,
+body.dark .it-header {
+  background: var(--it-bg-card);
+  border-color: var(--it-border);
+}
+
+body.dark .it-user-dropdown {
+  background: var(--it-bg-card);
+  border-color: var(--it-border);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .it-sidebar {
+    width: 220px;
+  }
+  :root {
+    --it-sidebar-width: 220px;
+  }
+}
+

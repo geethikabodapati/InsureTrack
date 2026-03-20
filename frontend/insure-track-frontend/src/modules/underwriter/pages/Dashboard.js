@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Legend 
 } from 'recharts';
-import { getDashboardStats, getAllCases } from '../../../../src/core/services/api.js';
+import { getDashboardStats, getAllCases } from '../../../core/services/api.js';
 import '../styles/underwriter.css';
 
 const Dashboard = () => {

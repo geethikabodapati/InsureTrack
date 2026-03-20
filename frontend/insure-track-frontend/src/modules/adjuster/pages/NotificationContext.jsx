@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
-import { notificationsApi } from "../../../services/api";
+import { notificationsApi } from "../../../core/services/api";
 
 // Vasudha's userId in the backend
 const ADJUSTER_USER_ID = 5;
@@ -8,7 +8,7 @@ const NotificationContext = createContext(null);
 
 export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading]             = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchNotifications = useCallback(async () => {
     setLoading(true);

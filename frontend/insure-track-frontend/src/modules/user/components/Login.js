@@ -13,7 +13,7 @@ const Login = () => {
 
     const validateForm = () => {
         let tempErrors = {};
-        
+
         // Email Validation (Standard format)
         const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
         if (!emailRegex.test(email)) {
@@ -37,7 +37,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        
+
         // Only proceed if client-side validation passes
         if (!validateForm()) return;
 
@@ -45,14 +45,15 @@ const Login = () => {
             const response = await login({ email, password });
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('role', response.data.role);
-            localStorage.setItem('user',JSON.stringify(response.data));
+            localStorage.setItem('user', JSON.stringify(response.data));
             window.dispatchEvent(new Event("storage"));
             const role = response.data.role;
             if (role === 'ADMIN') navigate('/admin-dashboard');
             else if (role === "CUSTOMER") navigate('/customer-dashboard');
             else if (role === "UNDERWRITER") navigate('/underwriter-dashboard');
-            else if (role === "AGENT") navigate('/agent/dashboard');
-            else if (role === "ANALYST") navigate('/billing-dashboard');
+            else if (role === "AGENT") navigate('/agent-dashboard');
+            else if (role === "ANALYST") navigate('/analyst-dashboard');
+            else if (role === "ADJUSTER") navigate('/adjuster-dashboard');
             else navigate('/dashboard');
         } catch (error) {
             setErrors({ api: error.response?.data?.message || "Invalid Credentials" });
@@ -89,13 +90,13 @@ const Login = () => {
                     <form onSubmit={handleLogin}>
                         <div className="input-group">
                             <label>Email</label>
-                            <input 
-                                type="email" 
+                            <input
+                                type="email"
                                 placeholder="Enter your email"
-                                value={email} 
-                                onChange={(e) => setEmail(e.target.value)} 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className={errors.email ? "input-error" : ""}
-                                required 
+                                required
                             />
                             {errors.email && <p className="error-msg text-xs mt-1">{errors.email}</p>}
                         </div>
@@ -103,13 +104,13 @@ const Login = () => {
                         <div className="input-group">
                             <label>Password</label>
                             <div className="password-wrapper">
-                                <input 
-                                    type={showPassword ? "text" : "password"} 
+                                <input
+                                    type={showPassword ? "text" : "password"}
                                     placeholder="Enter your password"
-                                    value={password} 
-                                    onChange={(e) => setPassword(e.target.value)} 
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className={errors.password ? "input-error" : ""}
-                                    required 
+                                    required
                                 />
                                 <button type="button" className="eye-toggle" onClick={() => setShowPassword(!showPassword)}>
                                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -120,14 +121,14 @@ const Login = () => {
 
                         <div className="form-options">
                             <label className="remember-me">
-                                <input type="checkbox" className="w-4 h-4" /> 
+                                <input type="checkbox" className="w-4 h-4" />
                                 <span className="text-gray-600">Remember me</span>
                             </label>
                             <a href="/forgot-password" size={20} className="forgot-link">Forgot password?</a>
                         </div>
 
                         <button type="submit" className="btn-submit">Sign In</button>
-                        
+
                         {/* API level error message */}
                         {errors.api && <p className="error-msg text-center mt-3">{errors.api}</p>}
                     </form>

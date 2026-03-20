@@ -2,21 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --font-size: 16px;
-  --background: #ffffff;
-  --foreground: #0a0a0f;
-  --card: #ffffff;
-  --primary: #030213;
-  --primary-foreground: #ffffff;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --destructive: #d4183d;
-  --border: rgba(0, 0, 0, 0.1);
-  --input-background: #f3f3f5;
-  --radius: 0.625rem;
-}
+/* Import InsureTrack Design System */
+@import './styles/design-system.css';
+@import './styles/components.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -26,10 +14,11 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #f9fafb;
-  color: #0a0a0f;
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: var(--it-bg);
+  color: var(--it-text-primary);
+  font-family: var(--it-font);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root { height: 100%; }

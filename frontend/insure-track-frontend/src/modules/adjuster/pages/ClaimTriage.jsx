@@ -1,33 +1,33 @@
 import { useState, useEffect } from "react";
 import { AlertCircle, RefreshCw, UserCheck } from "lucide-react";
-import { claimsApi, assignmentApi } from "../../../services/api";
+import { claimsApi, assignmentApi } from "../../../core/services/api";
 import { useNotifications } from "./NotificationContext";
 
 const JOHN_DOE_ADJUSTER_ID = 5;
 
 const PRIORITY_STYLE = {
-  HIGH:   "border-red-400 bg-red-50 text-red-700",
+  HIGH: "border-red-400 bg-red-50 text-red-700",
   MEDIUM: "border-yellow-400 bg-yellow-50 text-yellow-700",
-  LOW:    "border-green-400 bg-green-50 text-green-700",
+  LOW: "border-green-400 bg-green-50 text-green-700",
 };
 
 const STATUS_BADGE = {
-  OPEN:          "bg-blue-100 text-blue-800",
+  OPEN: "bg-blue-100 text-blue-800",
   INVESTIGATING: "bg-yellow-100 text-yellow-800",
-  SETTLED:       "bg-green-100 text-green-800",
-  DENIED:        "bg-red-100 text-red-800",
-  CLOSED:        "bg-gray-100 text-gray-700",
+  SETTLED: "bg-green-100 text-green-800",
+  DENIED: "bg-red-100 text-red-800",
+  CLOSED: "bg-gray-100 text-gray-700",
 };
 
 export function ClaimTriage() {
-  const [claims, setClaims]         = useState([]);
-  const [selected, setSelected]     = useState(null);
+  const [claims, setClaims] = useState([]);
+  const [selected, setSelected] = useState(null);
   const [assignment, setAssignment] = useState(null);
-  const [priority, setPriority]     = useState("HIGH");
-  const [toast, setToast]           = useState(null);
-  const [loading, setLoading]       = useState(false);
-  const [fetching, setFetching]     = useState(false);
-  const { refresh }                 = useNotifications();
+  const [priority, setPriority] = useState("HIGH");
+  const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const { refresh } = useNotifications();
 
   const showToast = (type, text) => { setToast({ type, text }); setTimeout(() => setToast(null), 4000); };
 
@@ -50,7 +50,7 @@ export function ClaimTriage() {
     try {
       const res = await assignmentApi.getByClaim(claimId);
       setAssignment(res.data);
-    } catch (_) {}
+    } catch (_) { }
   };
 
   useEffect(() => { loadClaims(); }, []);
@@ -65,7 +65,7 @@ export function ClaimTriage() {
     try {
       const res = await assignmentApi.assign(selected.claimId, {
         adjusterId: JOHN_DOE_ADJUSTER_ID,
-        priority:   priority,
+        priority: priority,
       });
       setAssignment(res.data);
       // ── Fire notification ──
@@ -90,9 +90,8 @@ export function ClaimTriage() {
       </div>
 
       {toast && (
-        <div className={`border rounded-lg p-4 mb-5 flex items-center gap-3 text-sm ${
-          toast.type === "success" ? "bg-green-50 border-green-200 text-green-900" : "bg-red-50 border-red-200 text-red-900"
-        }`}>
+        <div className={`border rounded-lg p-4 mb-5 flex items-center gap-3 text-sm ${toast.type === "success" ? "bg-green-50 border-green-200 text-green-900" : "bg-red-50 border-red-200 text-red-900"
+          }`}>
           <AlertCircle className="w-4 h-4 flex-shrink-0" />{toast.text}
         </div>
       )}
@@ -118,9 +117,8 @@ export function ClaimTriage() {
             <div className="divide-y divide-gray-50 max-h-[520px] overflow-y-auto">
               {claims.map(c => (
                 <button key={c.claimId} onClick={() => handleSelect(c)}
-                  className={`w-full text-left px-5 py-4 transition-colors ${
-                    selected?.claimId === c.claimId ? "bg-blue-50 border-l-4 border-l-blue-600" : "hover:bg-gray-50"
-                  }`}>
+                  className={`w-full text-left px-5 py-4 transition-colors ${selected?.claimId === c.claimId ? "bg-blue-50 border-l-4 border-l-blue-600" : "hover:bg-gray-50"
+                    }`}>
                   <div className="flex justify-between items-start mb-1">
                     <p className="text-sm font-bold text-gray-900">Claim #{c.claimId}</p>
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_BADGE[c.status]}`}>{c.status}</span>
@@ -176,11 +174,10 @@ export function ClaimTriage() {
                 <div className="mb-4">
                   <p className="text-xs font-semibold text-gray-700 mb-2">Priority</p>
                   <div className="grid grid-cols-3 gap-2">
-                    {["LOW","MEDIUM","HIGH"].map(p => (
+                    {["LOW", "MEDIUM", "HIGH"].map(p => (
                       <button key={p} onClick={() => setPriority(p)}
-                        className={`py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-                          priority === p ? PRIORITY_STYLE[p] : "border-gray-200 text-gray-600 hover:border-gray-300"
-                        }`}>{p}</button>
+                        className={`py-2 rounded-lg border-2 text-sm font-medium transition-all ${priority === p ? PRIORITY_STYLE[p] : "border-gray-200 text-gray-600 hover:border-gray-300"
+                          }`}>{p}</button>
                     ))}
                   </div>
                 </div>

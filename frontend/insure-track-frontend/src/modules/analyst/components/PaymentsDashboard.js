@@ -1,246 +1,150 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
-import "../styles/billing.css";
+import React, { useEffect, useState } from 'react';
 
 const PaymentsDashboard = () => {
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("ALL");
-
-  // for preview
+  const [payments, setPayments]             = useState([]);
+  const [loading, setLoading]               = useState(true);
+  const [filter, setFilter]                 = useState('ALL');
   const [selectedPayment, setSelectedPayment] = useState(null);
-  
-  //for usermail to display
-  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log("Stored user:", storedUser);
-  const userEmail = storedUser?.name || storedUser?.email || "Analyst";
-
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8082/api/analyst/billing/payments/all",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch payments");
-        }
+        const response = await fetch('http://localhost:8082/api/analyst/billing/payments/all', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch payments');
         const data = await response.json();
-        console.log("Payments from backend:", data);
         setPayments(data);
       } catch (error) {
-        console.error("Error fetching payments:", error);
+        console.error('Error fetching payments:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchPayments();
   }, []);
 
-  // KPI calculations
-  const totalPayments = payments.reduce((sum, pay) => sum + pay.amount, 0);
-  const completed = payments
-    .filter((pay) => pay.status === "COMPLETED")
-    .reduce((sum, pay) => sum + pay.amount, 0);
-  const pending = payments
-    .filter((pay) => pay.status === "PENDING")
-    .reduce((sum, pay) => sum + pay.amount, 0);
-  const failed = payments
-    .filter((pay) => pay.status === "FAILED")
-    .reduce((sum, pay) => sum + pay.amount, 0);
+  const totalPayments = payments.reduce((s, p) => s + p.amount, 0);
+  const completed     = payments.filter(p => p.status === 'COMPLETED').reduce((s, p) => s + p.amount, 0);
+  const pending       = payments.filter(p => p.status === 'PENDING').reduce((s, p) => s + p.amount, 0);
+  const failed        = payments.filter(p => p.status === 'FAILED').reduce((s, p) => s + p.amount, 0);
 
-  // Apply filter
-  const filteredPayments =
-    filter === "ALL" ? payments : payments.filter((pay) => pay.status === filter);
+  const filtered = filter === 'ALL' ? payments : payments.filter(p => p.status === filter);
+
+  const statusBadgeClass = (status) => {
+    if (status === 'COMPLETED') return 'it-badge it-badge-success';
+    if (status === 'FAILED')    return 'it-badge it-badge-danger';
+    return 'it-badge it-badge-warning';
+  };
 
   return (
-    <div className="app-layout">
-      <Sidebar active="payments" />
-      <div className="right-section">
-        <header className="topnav">
-          <div className="topnav-left">
-            <h1>Payments Dashboard</h1>
-            <p>Track and manage all payments</p>
+    <div className="it-page">
+      <div className="it-page-header">
+        <h1 className="it-page-title">Payments</h1>
+        <p className="it-page-subtitle">Track and manage all payment transactions</p>
+      </div>
+
+      {/* KPI Stats */}
+      <div className="it-stat-grid">
+        {[
+          { label: 'Total Payments', value: `$${totalPayments.toLocaleString()}`, color: '#EFF6FF', ic: '#1E3A8A' },
+          { label: 'Completed',      value: `$${completed.toLocaleString()}`,     color: '#F0FDF4', ic: '#16A34A' },
+          { label: 'Pending',        value: `$${pending.toLocaleString()}`,       color: '#FEF3C7', ic: '#B45309' },
+          { label: 'Failed',         value: `$${failed.toLocaleString()}`,        color: '#FEE2E2', ic: '#DC2626' },
+        ].map(s => (
+          <div key={s.label} className="it-stat-card">
+            <div>
+              <p className="it-stat-label">{s.label}</p>
+              <p className="it-stat-value">{s.value}</p>
+            </div>
+            <div className="it-stat-icon" style={{ background: s.color }}>
+              <span style={{ fontSize: 18, color: s.ic, fontWeight: 800 }}>$</span>
+            </div>
           </div>
-          <div className="topnav-right">
-            <button className="notif-btn">🔔</button>
-            <span className="user-name">{userEmail}</span>
-            <button className="logout-btn">Logout</button>
-          </div>
-        </header>
+        ))}
+      </div>
 
-        <main className="main-content">
-          {/* KPI Cards */}
-          <section className="p-kpi-cards"  style={{display: "flex",gap: "30px",marginBottom: "30px",padding:"0px"}}>
-
-            <div className="card1" style={{backgroundColor:"blue", color: "white", padding: "25px", borderRadius: "6px",boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-              flex: "1",fontWeight: "bold", fontSize:"15px"}}>
-              Total Payments:<span className="c1" style={{fontSize:"25px"}}><p> ${totalPayments}</p></span>
-            </div>
-            <div className="card2" style={{backgroundColor:"green", color: "white", padding: "25px", borderRadius: "6px",boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-              flex: "1",fontWeight: "bold", fontSize:"15px"}}>
-              Completed:<span className="c2" style={{fontSize:"25px"}}> <p>${completed}</p></span>
-            </div>
-            <div className="card3" style={{backgroundColor:"orange", color: "white", padding: "25px", borderRadius: "6px",boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-              flex: "1",fontWeight: "bold", fontSize:"15px"}}>
-              Pending:<span className="c3" style={{fontSize:"25px"}}><p> ${pending}</p></span>
-            </div>
-            <div className="card4" style={{backgroundColor:"red", color: "white", padding: "25px", borderRadius: "6px",boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-              flex: "1",fontWeight: "bold", fontSize:"15px"}}>
-              Failed:<span className="c4" style={{fontSize:"25px"}}><p> ${failed}</p></span>
-            </div>
-          </section>
-
-          {/* Status Filter Nav */}
-          <div className="status-nav">
-            <button
-              className={filter === "ALL" ? "active" : ""}
-              onClick={() => setFilter("ALL")}
-            >
-              All ({payments.length})
-            </button>
-            <button
-              className={filter === "COMPLETED" ? "active" : ""}
-              onClick={() => setFilter("COMPLETED")}
-            >
-              Completed✅({payments.filter((p) => p.status === "COMPLETED").length})
-            </button>
-            <button
-              className={filter === "PENDING" ? "active" : ""}
-              onClick={() => setFilter("PENDING")}
-            >
-              Pending⏳ ({payments.filter((p) => p.status === "PENDING").length})
-            </button>
-            <button
-              className={filter === "FAILED" ? "active" : ""}
-              onClick={() => setFilter("FAILED")}
-            >
-              Failed❌ ({payments.filter((p) => p.status === "FAILED").length})
-            </button>
-
-
-            <button className="p-print-btn" style={{ float: "right", marginRight: "70px", backgroundColor: "pink"  }}  onClick={() => window.print()}>
-            🖨️ Print Report
-            </button>
-
-          </div>
-
-          {/* Payments Table */}
-          {loading ? (
-            <p>Loading payments...</p>
-          ) : filteredPayments.length === 0 ? (
-            <p>No payments found.</p>
-          ) : (
-            <table className="invoice-table">
-              <thead>
-                <tr>
-                  <th>Payment ID</th>
-                  <th>Invoice ID</th>
-                  <th>Customer Name</th>
-                  <th>Amount</th>
-                  <th>Paid Date</th>
-                  <th>Method</th>
-                  <th>Status</th>
-                  <th>Preview</th>
-                </tr>
-              </thead>
-             <tbody>
-  {filteredPayments.map((pay) => (
-    <React.Fragment key={pay.paymentId}>
-      <tr>
-        <td>{pay.paymentId}</td>
-        <td>{pay.invoiceId}</td>
-        <td>{pay.customerName}</td>
-        <td>${pay.amount}</td>
-        <td>{pay.paidDate}</td>
-        <td>{pay.method}</td>
-        <td>
-          <span
-            className={`status-badge ${
-              pay.status === "COMPLETED"
-                ? "status-completed"
-                : pay.status === "PENDING"
-                ? "status-pending"
-                : pay.status === "FAILED"
-                ? "status-failed"
-                : ""
-            }`}
+      {/* Filter Tabs */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        {['ALL','COMPLETED','PENDING','FAILED'].map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`it-btn it-btn-sm ${filter === f ? 'it-btn-primary' : 'it-btn-secondary'}`}
           >
-            {pay.status}
-          </span>
-        </td>
-        <td>
-          <button onClick={() => setSelectedPayment(pay)} style={{backgroundColor:"skyblue", fontStyle:"bold",border: "1px solid white", borderRadius:"25px", padding:"10px" }}>
-            View Details
+            {f === 'ALL' ? `All (${payments.length})` : `${f} (${payments.filter(p => p.status === f).length})`}
           </button>
-        </td>
-      </tr>
+        ))}
+        <button className="it-btn it-btn-secondary it-btn-sm" style={{ marginLeft: 'auto' }} onClick={() => window.print()}>
+          🖨 Print
+        </button>
+      </div>
 
-      {selectedPayment && selectedPayment.paymentId === pay.paymentId && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button
-              className="close-btn"
-              onClick={() => setSelectedPayment(null)}
-            >
-              ✖
-            </button>
-            <h2>Payment Details</h2>
-            <p><strong>Customer:</strong> {selectedPayment.customerName}</p>
-            <p><strong>Invoice ID:</strong> {selectedPayment.invoiceId}</p>
-            <p><strong>Payment ID:</strong> {selectedPayment.paymentId}</p>
-            <p><strong>Amount:</strong> ${selectedPayment.amount}</p>
-            <p><strong>Paid Date:</strong> {selectedPayment.paidDate}</p>
-            <p><strong>Method:</strong> {selectedPayment.method}</p>
-            <p><strong>Status:</strong> {selectedPayment.status}</p>
+      {/* Table */}
+      <div className="it-table-wrapper">
+        {loading ? (
+          <div className="it-empty-state"><p>Loading payments…</p></div>
+        ) : filtered.length === 0 ? (
+          <div className="it-empty-state"><p>No payments found for this filter.</p></div>
+        ) : (
+          <table className="it-table">
+            <thead>
+              <tr>
+                <th>Payment ID</th><th>Invoice ID</th><th>Customer</th>
+                <th>Amount</th><th>Paid Date</th><th>Method</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(pay => (
+                <tr key={pay.paymentId}>
+                  <td>#{pay.paymentId}</td>
+                  <td>{pay.invoiceId}</td>
+                  <td>{pay.customerName}</td>
+                  <td>${pay.amount?.toLocaleString()}</td>
+                  <td>{pay.paidDate}</td>
+                  <td>{pay.method}</td>
+                  <td><span className={statusBadgeClass(pay.status)}>{pay.status}</span></td>
+                  <td>
+                    <button className="it-btn it-btn-secondary it-btn-sm" onClick={() => setSelectedPayment(pay)}>
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Details Modal */}
+      {selectedPayment && (
+        <div className="it-modal-overlay" onClick={() => setSelectedPayment(null)}>
+          <div className="it-modal" onClick={e => e.stopPropagation()}>
+            <div className="it-modal-header">
+              <h2 className="it-modal-title">Payment #{selectedPayment.paymentId}</h2>
+              <button className="it-btn it-btn-ghost" onClick={() => setSelectedPayment(null)}>✕</button>
+            </div>
+            {[
+              ['Customer',  selectedPayment.customerName],
+              ['Invoice',   selectedPayment.invoiceId],
+              ['Amount',    `$${selectedPayment.amount}`],
+              ['Paid Date', selectedPayment.paidDate],
+              ['Method',    selectedPayment.method],
+              ['Status',    selectedPayment.status],
+            ].map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--it-border)' }}>
+                <span style={{ fontWeight: 600, color: 'var(--it-text-secondary)', fontSize: '14px' }}>{k}</span>
+                <span style={{ color: 'var(--it-text-primary)', fontSize: '14px' }}>{v}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
-    </React.Fragment>
-  ))}
-</tbody>
-
-            </table>
-          )}
-        </main>
-      </div>
     </div>
   );
 };
 
 export default PaymentsDashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from "react";
-// import Sidebar from "./Sidebar";
-// import "../../../styles/payment.css";
-
-// const PaymentsDashboard = () => (
-//   <div className="dashboard-layout">
-//     <Sidebar active="payments" />
-//     <div className="main-content">
-//       {/* Topbar + KPIs + Payment Table */}
-//     </div>
-//   </div>
-// );
-
-// export default PaymentsDashboard;

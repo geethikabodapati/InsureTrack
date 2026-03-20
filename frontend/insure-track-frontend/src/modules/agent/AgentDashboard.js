@@ -18,15 +18,15 @@ const AgentDashboard = () => {
             </div>
 
             {/* 2. KPI Cards Row */}
-            <DashboardStats />
+            {/* <DashboardStats /> */}
 
             {/* 3. Quote Management Table (Main dashboard view as requested) */}
-            <QuoteManagement />
-            
-            < PolicyManagement/>
+            {/* <QuoteManagement />
+
+            < PolicyManagement />
             < EndorsementManagement />
             <RenewalManagement />
-            <CancellationManagement />
+            <CancellationManagement /> */}
         </div>
     );
 };

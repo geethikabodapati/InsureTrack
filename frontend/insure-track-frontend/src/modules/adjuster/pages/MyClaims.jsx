@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import { RefreshCw, AlertCircle, Search } from "lucide-react";
-import { claimsApi } from "../../../services/api";
+import { claimsApi } from "../../../core/services/api";
 
 const STATUS_STYLE = {
-  OPEN:          "bg-blue-100 text-blue-800",
+  OPEN: "bg-blue-100 text-blue-800",
   INVESTIGATING: "bg-yellow-100 text-yellow-800",
-  SETTLED:       "bg-green-100 text-green-800",
-  DENIED:        "bg-red-100 text-red-800",
-  CLOSED:        "bg-gray-100 text-gray-700",
+  SETTLED: "bg-green-100 text-green-800",
+  DENIED: "bg-red-100 text-red-800",
+  CLOSED: "bg-gray-100 text-gray-700",
 };
 
-const STATUSES = ["ALL","OPEN","INVESTIGATING","SETTLED","DENIED","CLOSED"];
+const STATUSES = ["ALL", "OPEN", "INVESTIGATING", "SETTLED", "DENIED", "CLOSED"];
 
 export function MyClaims() {
-  const [claims, setClaims]     = useState([]);
-  const [filter, setFilter]     = useState("ALL");
-  const [search, setSearch]     = useState("");
+  const [claims, setClaims] = useState([]);
+  const [filter, setFilter] = useState("ALL");
+  const [search, setSearch] = useState("");
   const [fetching, setFetching] = useState(false);
-  const [toast, setToast]       = useState(null);
+  const [toast, setToast] = useState(null);
 
   const showToast = (type, text) => { setToast({ type, text }); setTimeout(() => setToast(null), 3000); };
 
@@ -74,11 +74,10 @@ export function MyClaims() {
       <div className="flex flex-wrap gap-2 mb-4">
         {STATUSES.map(s => (
           <button key={s} onClick={() => setFilter(s)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors border ${
-              filter === s
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors border ${filter === s
                 ? "bg-blue-600 border-blue-600 text-white"
                 : "bg-white border-gray-200 text-gray-700 hover:border-blue-300"
-            }`}>
+              }`}>
             {s} <span className={`ml-1 text-xs font-bold ${filter === s ? "text-blue-100" : "text-gray-400"}`}>
               ({counts[s]})
             </span>
@@ -116,7 +115,7 @@ export function MyClaims() {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    {["Claim ID","Policy ID","Type","Incident Date","Reported Date","Status"].map(h => (
+                    {["Claim ID", "Policy ID", "Type", "Incident Date", "Reported Date", "Status"].map(h => (
                       <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                     ))}
                   </tr>

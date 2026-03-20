@@ -1,150 +1,200 @@
-:root {
-  --primary: #030213;
-  --accent-blue: #2563eb;
-  --bg-input: #f3f3f5;
-  --text-muted: #717182;
-  --radius: 0.625rem;
-  --border: rgba(0, 0, 0, 0.1);
-}
+/* ============================================================
+   InsureTrack User Module — Authentication Styles
+   Unified with the design system tokens (see design-system.css)
+   ============================================================ */
 
 .auth-container {
   display: flex;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
-  background-color: #ffffff;
+  background-color: var(--it-bg);
+  font-family: var(--it-font);
 }
 
-/* Left Pane - Brand & Info */
+/* --- Left Pane - Brand & Info --- */
 .info-pane {
   flex: 1.2;
-  padding: 30px;
+  padding: var(--it-space-8);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--border);
+  background-color: var(--it-bg-card);
+  border-right: 1px solid var(--it-border);
+  position: relative;
+  overflow: hidden;
 }
 
 .brand-badge {
-  background: var(--accent-blue);
+  background: var(--it-primary);
   color: white;
   padding: 8px 18px;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 800;
+  border-radius: var(--it-radius-md);
+  font-size: var(--it-font-size-base);
+  font-weight: 700;
   width: fit-content;
-  margin-top: 50px;
-  margin-left: 50px;
+  margin-top: var(--it-space-8);
+  margin-left: var(--it-space-8);
+  box-shadow: var(--it-shadow-sm);
+}
+
+.info-content {
+  margin-top: var(--it-space-12);
+  margin-left: var(--it-space-8);
+  margin-right: var(--it-space-8);
+  flex-grow: 1;
+  z-index: 1;
 }
 
 .info-content h1 {
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: var(--primary);
-  line-height: 1.2;
-  margin-bottom: 15px;
-  margin-left: 50px;
+  font-size: var(--it-font-size-4xl);
+  font-weight: 800;
+  color: var(--it-text-primary);
+  line-height: 1.1;
+  margin-bottom: var(--it-space-4);
+  letter-spacing: -0.03em;
 }
 
 .info-content p {
-  color: var(--text);
-  font-size: 1.0rem;
-  max-width: 590px;
-  margin-bottom: 35px;
-  margin-left: 50px;
+  color: var(--it-text-secondary);
+  font-size: var(--it-font-size-lg);
+  max-width: 500px;
+  margin-bottom: var(--it-space-8);
+  line-height: 1.6;
 }
 
 .hero-image {
   width: 100%;
-  height: 250px;
+  height: 280px;
   background-image: url("../../public/Insuretrack.png");
   background-size: cover;
   background-position: center;
-  border-radius: var(--radius);
+  border-radius: var(--it-radius-xl);
+  box-shadow: var(--it-shadow-lg);
+  border: 1px solid var(--it-border);
 }
 
 .stats-row {
   display: flex;
-  gap: 120px;
-  margin-left: 50px;
+  gap: var(--it-space-12);
+  margin-left: var(--it-space-8);
   margin-top: auto;
-  padding-top: 30px;
+  padding-top: var(--it-space-8);
+  z-index: 1;
 }
 
 .stat-item h3 {
-  font-size: 1.8rem;
+  font-size: var(--it-font-size-3xl);
   font-weight: 800;
-  color: var(--accent-blue);
+  color: var(--it-primary);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .stat-item p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
+  font-size: var(--it-font-size-sm);
+  color: var(--it-text-secondary);
+  font-weight: 600;
+  margin-top: 4px;
 }
 
-/* Right Pane - Forms */
+/* --- Right Pane - Forms --- */
 .form-pane {
   flex: 1;
-  background-color: #f8faff;
+  background-color: var(--it-bg);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: var(--it-space-8);
 }
 
 .auth-card {
   width: 100%;
   max-width: 440px;
-  background: white;
-  padding: 40px;
-  border-radius: var(--radius);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-  border: 1px solid var(--border);
+  background: var(--it-bg-card);
+  padding: var(--it-space-8);
+  border-radius: var(--it-radius-2xl);
+  box-shadow: var(--it-shadow-xl);
+  border: 1px solid var(--it-border);
+  animation: it-fadeIn 0.4s ease-out;
 }
 
 .card-header {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: var(--it-space-6);
 }
 
 .icon-circle {
-  width: 40px;
-  height: 40px;
-  background: #d6f1ef;
-  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  background: rgba(30, 58, 138, 0.08); /* Primary color low opacity */
+  border-radius: var(--it-radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 15px;
+  margin: 0 auto var(--it-space-4);
+  color: var(--it-primary);
 }
 
+.card-header h2 {
+  font-size: var(--it-font-size-2xl);
+  font-weight: 800;
+  color: var(--it-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.card-header p {
+  color: var(--it-text-secondary);
+  font-size: var(--it-font-size-sm);
+  margin-top: var(--it-space-1);
+}
+
+/* --- Form Elements --- */
 .input-group {
-  margin-bottom: 18px;
+  margin-bottom: var(--it-space-4);
 }
 
 .input-group label {
   display: block;
-  font-size: 14px;
+  font-size: var(--it-font-size-sm);
   font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--primary);
+  margin-bottom: var(--it-space-2);
+  color: var(--it-text-primary);
 }
 
-.input-group input, .input-group select {
+.input-group input, 
+.input-group select {
   width: 100%;
   padding: 12px 14px;
-  background: var(--bg-input);
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: all 0.2s;
+  background: var(--it-bg);
+  border: 1.5px solid var(--it-border);
+  border-radius: var(--it-radius-md);
+  font-size: var(--it-font-size-sm);
+  color: var(--it-text-primary);
+  font-family: var(--it-font);
+  transition: var(--it-transition);
   box-sizing: border-box;
 }
 
+.input-group input::placeholder {
+  color: var(--it-text-muted);
+}
+
 .input-group input:focus {
-  border-color: var(--accent-blue);
-  background: white;
+  border-color: var(--it-accent);
+  background: var(--it-bg-card);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.input-error {
+  border-color: var(--it-danger) !important;
+  background: var(--it-danger-bg) !important;
+}
+
+.error-msg {
+  color: var(--it-danger);
+  font-size: var(--it-font-size-xs);
+  font-weight: 500;
+  margin-top: 6px;
 }
 
 .password-wrapper {
@@ -153,64 +203,114 @@
 
 .eye-toggle {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--it-text-muted);
   cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.eye-toggle:hover {
+  color: var(--it-text-primary);
 }
 
 .btn-submit {
   width: 100%;
   padding: 14px;
-  background: var(--accent-blue);
+  background: var(--it-primary);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 16px;
+  border-radius: var(--it-radius-md);
+  font-weight: 600;
+  font-size: var(--it-font-size-base);
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: var(--it-space-4);
+  transition: var(--it-transition);
+  font-family: var(--it-font);
 }
 
-.error-msg {
-  color: #d4183d;
-  font-size: 12px;
-  font-weight: 500;
-  margin-top: 4px;
+.btn-submit:hover {
+  background: var(--it-primary-hover);
+  box-shadow: var(--it-shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--it-space-4) 0;
+  font-size: var(--it-font-size-sm);
 }
 
 .remember-me {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between checkbox and text */
-    cursor: pointer;
-    color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--it-text-secondary);
+  font-weight: 500;
 }
 
-/* Overriding your global input style for ONLY the checkbox */
 .remember-me input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin: 0; /* Removes that large 20px bottom margin from your global CSS */
-    cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--it-primary);
 }
 
 .forgot-link {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: bold;
+  color: var(--it-accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--it-transition);
 }
 
 .forgot-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+  color: var(--it-primary);
 }
-.form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px; /* Spacing before the Sign In button */
-    font-size: 14px;
+
+/* Base text classes used in auth pages */
+.text-center { text-align: center; }
+.mt-3 { margin-top: var(--it-space-3); }
+.mt-6 { margin-top: var(--it-space-6); }
+.text-sm { font-size: var(--it-font-size-sm); }
+.text-xs { font-size: var(--it-font-size-xs); }
+.text-gray-500 { color: var(--it-text-muted); }
+.text-gray-600 { color: var(--it-text-secondary); }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  .info-pane {
+    display: none; /* Hide info pane on smaller screens */
+  }
+}
+
+/* --- Dark Mode Overrides for Auth --- */
+body.dark .auth-container {
+  background-color: var(--it-bg);
+}
+
+body.dark .form-pane {
+  background-color: var(--it-bg);
+}
+
+body.dark .auth-card {
+  background: var(--it-bg-card);
+  border-color: var(--it-border);
+}
+
+body.dark .info-pane {
+  background-color: var(--it-bg-card);
 }

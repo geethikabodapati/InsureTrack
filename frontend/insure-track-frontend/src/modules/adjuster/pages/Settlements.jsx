@@ -196,7 +196,7 @@
 // }
 import React, { useState, useEffect } from "react";
 import { FileCheck, AlertCircle, RefreshCw, DollarSign } from "lucide-react";
-import { settlementApi, claimsApi, reservesApi } from "../../../services/api";
+import { settlementApi, claimsApi, reservesApi } from "../../../core/services/api";
 import { useNotifications } from "./NotificationContext";
 
 // Flow: SETTLED claim → MUST have reserves → enter amount → CLOSED
@@ -248,7 +248,7 @@ export function Settlements() {
       ]);
       setSettlement(sRes.data || null);
       setReserves(Array.isArray(rRes.data) ? rRes.data : []);
-    } catch (_) {}
+    } catch (_) { }
   };
 
   useEffect(() => {
@@ -311,11 +311,10 @@ export function Settlements() {
 
       {toast && (
         <div
-          className={`border rounded-lg p-4 mb-5 flex items-center gap-3 text-sm ${
-            toast.type === "success"
+          className={`border rounded-lg p-4 mb-5 flex items-center gap-3 text-sm ${toast.type === "success"
               ? "bg-green-50 border-green-200 text-green-900"
               : "bg-red-50 border-red-200 text-red-900"
-          }`}
+            }`}
         >
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {toast.text}
@@ -344,18 +343,16 @@ export function Settlements() {
                 <button
                   key={c.claimId}
                   onClick={() => selectClaim(c)}
-                  className={`w-full text-left px-5 py-4 transition-colors ${
-                    selected?.claimId === c.claimId
+                  className={`w-full text-left px-5 py-4 transition-colors ${selected?.claimId === c.claimId
                       ? "bg-blue-50 border-l-4 border-l-blue-600"
                       : "hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-1">
                     <p className="text-sm font-bold text-gray-900">#{c.claimId}</p>
                     <span
-                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                        STATUS_BADGE[c.status] || "bg-gray-100 text-gray-700"
-                      }`}
+                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_BADGE[c.status] || "bg-gray-100 text-gray-700"
+                        }`}
                     >
                       {c.status}
                     </span>
@@ -374,9 +371,8 @@ export function Settlements() {
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-sm font-semibold text-gray-900">Claim Details</p>
                   <span
-                    className={`text-sm font-bold px-3 py-1 rounded-full ${
-                      STATUS_BADGE[selected.status] || "bg-gray-100 text-gray-700"
-                    }`}
+                    className={`text-sm font-bold px-3 py-1 rounded-full ${STATUS_BADGE[selected.status] || "bg-gray-100 text-gray-700"
+                      }`}
                   >
                     {selected.status}
                   </span>

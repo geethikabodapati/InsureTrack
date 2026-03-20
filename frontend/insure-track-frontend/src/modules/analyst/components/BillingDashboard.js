@@ -1,359 +1,151 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
-import "../styles/billing.css";
-import { Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const BillingDashboard = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("ALL");
-
-    // for preview
+  const [filter, setFilter] = useState('ALL');
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-
-  //for usermail to display
-  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log("Stored user:", storedUser);
-  const userEmail = storedUser?.name || storedUser?.email || "Analyst";
-
 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8082/api/analyst/billing/invoices/all",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // if JWT is used
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch invoices");
-        }
+        const response = await fetch('http://localhost:8082/api/analyst/billing/invoices/all', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch invoices');
         const data = await response.json();
-        console.log("Invoices from backend:", data);
         setInvoices(data);
       } catch (error) {
-        console.error("Error fetching invoices:", error);
+        console.error('Error fetching invoices:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchInvoices();
   }, []);
 
-  // KPI calculations
-  const totalBilled = invoices.reduce((sum, inv) => sum + inv.amount, 0);
-  const collected = invoices
-    .filter((inv) => inv.status === "PAID")
-    .reduce((sum, inv) => sum + inv.amount, 0);
-  const outstanding = totalBilled - collected;
+  const totalBilled  = invoices.reduce((s, i) => s + i.amount, 0);
+  const collected    = invoices.filter(i => i.status === 'PAID').reduce((s, i) => s + i.amount, 0);
+  const outstanding  = totalBilled - collected;
+  const overdue      = invoices.filter(i => i.status === 'OVERDUE').length;
 
-  // Apply filter
-  const filteredInvoices =
-    filter === "ALL" ? invoices : invoices.filter((inv) => inv.status === filter);
+  const filtered = filter === 'ALL' ? invoices : invoices.filter(i => i.status === filter);
 
-   return (
-    <div className="app-layout">
-      <Sidebar active="billing" />
-      <div className="right-section">
-        <header className="topnav">
-          <div className="topnav-left">
-            <h1>Financial Dashboard</h1>
-            <p>Monitor and manage billing & payments</p>
-          </div>
-          <div className="topnav-right">
-            <button className="notif-btn">🔔</button>
-            {/* 👇 Now userEmail is defined */}
-            <span className="user-name">{userEmail}</span>
-            <button className="logout-btn">Logout</button>
-          </div>
-        </header>
+  const statusBadgeClass = (status) => {
+    if (status === 'PAID')      return 'it-badge it-badge-success';
+    if (status === 'OVERDUE')   return 'it-badge it-badge-danger';
+    if (status === 'CANCELLED') return 'it-badge it-badge-neutral';
+    return 'it-badge it-badge-warning';
+  };
 
-        <main className="main-content">
-          {/* KPI Cards */}
-          <section className="kpi-cards">
-            <div className="card1">Total Billed:<p className="c1"> ${totalBilled}</p></div>
-            <div className="card2">Collected:<p className="c2"> ${collected}</p></div>
-            <div className="card3">Outstanding:<p className="c3"> ${outstanding}</p></div>
-          </section>
+  return (
+    <div className="it-page">
+      <div className="it-page-header">
+        <h1 className="it-page-title">Billing</h1>
+        <p className="it-page-subtitle">Monitor and manage all billing invoices</p>
+      </div>
 
-          
-
-
-          {/* Status Filter Nav */}
-          <div className="status-nav">
-            <button
-              className={filter === "ALL" ? "active" : ""}
-              onClick={() => setFilter("ALL")}
-            >
-              All ({invoices.length})
-            </button>
-            <button
-              className={filter === "PAID" ? "active" : ""}
-              onClick={() => setFilter("PAID")}
-            >
-              Paid ({invoices.filter((inv) => inv.status === "PAID").length})
-            </button>
-            <button
-              className={filter === "OPEN" ? "active" : ""}
-              onClick={() => setFilter("OPEN")}
-            >
-              Open ({invoices.filter((inv) => inv.status === "OPEN").length})
-            </button>
-            <button
-              className={filter === "OVERDUE" ? "active" : ""}
-              onClick={() => setFilter("OVERDUE")}
-            >
-              Overdue ({invoices.filter((inv) => inv.status === "OVERDUE").length})
-            </button>
-            <button
-              className={filter === "CANCELLED" ? "active" : ""}
-              onClick={() => setFilter("CANCELLED")}
-            >
-              Cancelled ({invoices.filter((inv) => inv.status === "CANCELLED").length})
-            </button>
-
-
-            <button className="b-print-btn" style={{ float: "right", marginRight: "70px", backgroundColor: "pink" }} onClick={() => window.print()}>
-           🖨️ Print Report
-          </button>
-
-
-          </div>
-
-          {/* Invoice Table */}
-          {loading ? (
-            <p>Loading invoices...</p>
-          ) : filteredInvoices.length === 0 ? (
-            <p>No invoices found.</p>
-          ) : (
-            <table className="invoice-table">
-              <thead>
-                <tr>
-                  <th>Invoice ID</th>
-                  <th>Policy ID</th>
-                  <th>Customer Name</th>
-                  <th>Amount</th>
-                  <th>Issue Date</th>
-                  <th>Due Date</th>
-                  <th>Status</th>
-                  <th>Preview</th>
-                </tr>
-              </thead>
-              <tbody>
-  {filteredInvoices.map((inv) => (
-    <React.Fragment key={inv.invoiceId}>
-      <tr>
-        <td>{inv.invoiceId}</td>
-        <td>{inv.policyId}</td>
-        <td>{inv.customerName}</td>
-        <td>${inv.amount}</td>
-        <td>{inv.issueDate}</td>
-        <td>{inv.dueDate}</td>
-        <td>
-          <span
-            className={`status-badge ${
-              inv.status === "PAID"
-                ? "status-paid"
-                : inv.status === "OPEN"
-                ? "status-open"
-                : inv.status === "OVERDUE"
-                ? "status-overdue"
-                : inv.status === "CANCELLED"
-                ? "status-cancelled"
-                : ""
-            }`}
-          >
-            {inv.status}
-          </span>
-        </td>
-        <td>
-        <button onClick={() => setSelectedInvoice(inv)} style={{backgroundColor:"skyblue", fontStyle:"bold",border: "1px solid white", borderRadius:"25px", padding:"10px" }}>
-          View Details
-        </button>
-          </td>
-
-                </tr>
-
-              {selectedInvoice && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <button className="close-btn" onClick={() => setSelectedInvoice(null)}>✖</button>
-              <h2>Customer Details</h2>
-              <p><strong>Customer:</strong> {selectedInvoice.customerName}</p>
-              <p><strong>Policy ID:</strong> {selectedInvoice.policyId}</p>
-              <p><strong>Invoice ID:</strong> {selectedInvoice.invoiceId}</p>
-              <p><strong>Amount:</strong> ${selectedInvoice.amount}</p>
-              <p><strong>Issue Date:</strong> {selectedInvoice.issueDate}</p>
-              <p><strong>Due Date:</strong> {selectedInvoice.dueDate}</p>
-              <p><strong>Status:</strong> {selectedInvoice.status}</p>
+      {/* KPI Stats */}
+      <div className="it-stat-grid">
+        {[
+          { label: 'Total Billed',  value: `$${totalBilled.toLocaleString()}`,   color: '#EFF6FF', ic: '#1E3A8A' },
+          { label: 'Collected',     value: `$${collected.toLocaleString()}`,      color: '#F0FDF4', ic: '#16A34A' },
+          { label: 'Outstanding',   value: `$${outstanding.toLocaleString()}`,    color: '#FEF3C7', ic: '#B45309' },
+          { label: 'Overdue Items', value: overdue,                               color: '#FEE2E2', ic: '#DC2626' },
+        ].map(s => (
+          <div key={s.label} className="it-stat-card">
+            <div>
+              <p className="it-stat-label">{s.label}</p>
+              <p className="it-stat-value">{s.value}</p>
+            </div>
+            <div className="it-stat-icon" style={{ background: s.color }}>
+              <span style={{ fontSize: 20, color: s.ic }}>$</span>
             </div>
           </div>
-        )}
-
-            </React.Fragment>
-          ))}
-        </tbody>
-
-            </table>
-          )}
-        </main>
+        ))}
       </div>
+
+      {/* Filter Tabs + Print */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        {['ALL','PAID','OPEN','OVERDUE','CANCELLED'].map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`it-btn it-btn-sm ${filter === f ? 'it-btn-primary' : 'it-btn-secondary'}`}
+          >
+            {f === 'ALL' ? `All (${invoices.length})` : `${f} (${invoices.filter(i => i.status === f).length})`}
+          </button>
+        ))}
+        <button className="it-btn it-btn-secondary it-btn-sm" style={{ marginLeft: 'auto' }} onClick={() => window.print()}>
+          🖨 Print
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className="it-table-wrapper">
+        {loading ? (
+          <div className="it-empty-state"><p>Loading invoices…</p></div>
+        ) : filtered.length === 0 ? (
+          <div className="it-empty-state"><p>No invoices found for this filter.</p></div>
+        ) : (
+          <table className="it-table">
+            <thead>
+              <tr>
+                <th>Invoice ID</th><th>Policy ID</th><th>Customer</th>
+                <th>Amount</th><th>Issue Date</th><th>Due Date</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(inv => (
+                <tr key={inv.invoiceId}>
+                  <td>#{inv.invoiceId}</td>
+                  <td>{inv.policyId}</td>
+                  <td>{inv.customerName}</td>
+                  <td>${inv.amount?.toLocaleString()}</td>
+                  <td>{inv.issueDate}</td>
+                  <td>{inv.dueDate}</td>
+                  <td><span className={statusBadgeClass(inv.status)}>{inv.status}</span></td>
+                  <td>
+                    <button className="it-btn it-btn-secondary it-btn-sm" onClick={() => setSelectedInvoice(inv)}>
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Details Modal */}
+      {selectedInvoice && (
+        <div className="it-modal-overlay" onClick={() => setSelectedInvoice(null)}>
+          <div className="it-modal" onClick={e => e.stopPropagation()}>
+            <div className="it-modal-header">
+              <h2 className="it-modal-title">Invoice #{selectedInvoice.invoiceId}</h2>
+              <button className="it-btn it-btn-ghost" onClick={() => setSelectedInvoice(null)}>✕</button>
+            </div>
+            {[
+              ['Customer',   selectedInvoice.customerName],
+              ['Policy ID',  selectedInvoice.policyId],
+              ['Amount',     `$${selectedInvoice.amount}`],
+              ['Issue Date', selectedInvoice.issueDate],
+              ['Due Date',   selectedInvoice.dueDate],
+              ['Status',     selectedInvoice.status],
+            ].map(([k, v]) => (
+              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--it-border)' }}>
+                <span style={{ fontWeight: 600, color: 'var(--it-text-secondary)', fontSize: '14px' }}>{k}</span>
+                <span style={{ color: 'var(--it-text-primary)', fontSize: '14px' }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default BillingDashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//import React, { useEffect, useState } from "react";
-//import Sidebar from "./Sidebar";
-//import "../../../styles/billing.css";
-//
-//const BillingDashboard = () => {
-//  const [invoices, setInvoices] = useState([]);
-//  const [loading, setLoading] = useState(true);
-//
-//  // Example: policyId stored in localStorage after login
-////  const policyId = localStorage.getItem("policyId");
-//
-//
-//    const policyId = 1;
-//  useEffect(() => {
-//    const fetchInvoices = async () => {
-//      try {
-//        const response = await fetch(
-//          `http://localhost:8082/api/analyst/billing/policies/${policyId}/cinvoices`,
-//          {
-//            headers: {
-//              "Content-Type": "application/json",
-//              Authorization: `Bearer ${localStorage.getItem("token")}`, // if JWT is used
-//            },
-//          }
-//        );
-//        if (!response.ok) {
-//          throw new Error("Failed to fetch invoices");
-//        }
-//        const data = await response.json();
-//        console.log("Invoices from backend:", data); // Debug log
-//        setInvoices(data);
-//      } catch (error) {
-//        console.error("Error fetching invoices:", error);
-//      } finally {
-//        setLoading(false);
-//      }
-//    };
-//
-//    if (policyId) {
-//      fetchInvoices();
-//    }
-//  }, [policyId]);
-//
-//  // KPI calculations
-//  const totalBilled = invoices.reduce((sum, inv) => sum + inv.amount, 0);
-//  const collected = invoices
-//    .filter((inv) => inv.status === "PAID")
-//    .reduce((sum, inv) => sum + inv.amount, 0);
-//  const outstanding = totalBilled - collected;
-//
-//  return (
-//    <div className="app-layout">
-//      <Sidebar active="billing" />
-//      <div className="right-section">
-//        <header className="topnav">
-//          <div className="topnav-left">
-//            <h1>Financial Dashboard</h1>
-//            <p>Monitor and manage billing & payments</p>
-//          </div>
-//          <div className="topnav-right">
-//            <button className="notif-btn">🔔</button>
-//            <span className="user-name">Sarah Johnson</span>
-//            <button className="logout-btn">Logout</button>
-//          </div>
-//        </header>
-//
-//        <main className="main-content">
-//          {/* KPI Cards */}
-//          <section className="kpi-cards">
-//            <div className="card">Total Billed: ${totalBilled}</div>
-//            <div className="card">Collected: ${collected}</div>
-//            <div className="card">Outstanding: ${outstanding}</div>
-//          </section>
-//
-//          {/* Invoice Table */}
-//          {loading ? (
-//            <p>Loading invoices...</p>
-//          ) : invoices.length === 0 ? (
-//            <p>No invoices found.</p>
-//          ) : (
-//            <table className="invoice-table">
-//              <thead>
-//                <tr>
-//                  <th>Invoice ID</th>
-//                  <th>Policy ID</th>
-//                   <th>Customer Name</th>
-//                  <th>Amount</th>
-//                  <th>Issue Date</th>
-//                  <th>Due Date</th>
-//                  <th>Status</th>
-//                </tr>
-//              </thead>
-//              <tbody>
-//                {invoices.map((inv) => (
-//                  <tr key={inv.invoiceId}>
-//                    <td>{inv.invoiceId}</td>
-//                    <td>{inv.policyId}</td>
-//                    <td>{inv.customerName}</td>
-//                    <td>${inv.amount}</td>
-//                    <td>{inv.issueDate}</td>
-//                    <td>{inv.dueDate}</td>
-//                    <td>{inv.status}</td>
-//                  </tr>
-//                ))}
-//              </tbody>
-//            </table>
-//          )}
-//        </main>
-//      </div>
-//    </div>
-//  );
-//};
-//
-//export default BillingDashboard;
