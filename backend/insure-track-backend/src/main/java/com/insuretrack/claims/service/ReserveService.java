@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ReserveService {
     ReserveResponseDTO createReserve(Long claimId, ReserveRequestDTO dto);
-
+    List<ReserveResponseDTO> getReservesByPolicy(Long policyId);
     List<ReserveResponseDTO> getReservesByClaim(Long claimId);
 }

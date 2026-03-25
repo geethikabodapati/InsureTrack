@@ -18,4 +18,5 @@ public class EndorsementResponseDTO {
     private Double premiumDelta;
     private LocalDate effectiveDate;
     private String status;
+    private String customerName;
 }

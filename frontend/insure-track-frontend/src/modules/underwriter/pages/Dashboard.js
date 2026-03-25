@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, Legend 
+  PieChart, Pie, Cell, Legend, Label // Added Label
 } from 'recharts';
+// New Icons
+import { FiFileText, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import { getDashboardStats, getAllCases } from '../../../core/services/api.js';
 import '../styles/underwriter.css';
 
 const Dashboard = () => {
+  // ... (keeping your existing state and useEffect logic)
   const [stats, setStats] = useState({
     totalProposals: 0,
     pendingReview: 0,
@@ -24,71 +27,57 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch both Stats and All Cases (for risk distribution)
         const [statsRes, casesRes] = await Promise.all([
           getDashboardStats(),
           getAllCases()
         ]);
-
         const data = statsRes.data;
-
         setStats({
-          totalProposals: data.totalProposals || 0,
-          pendingReview: data.pendingReview || 0,
-          approved: data.approved || 0,
-          declined: data.declined || 0,
-          conditional: data.conditional || 0
+          totalProposals: Number(data.totalProposals) || 0,
+          pendingReview: Number(data.pendingReview) || 0,
+          approved: Number(data.approved) || 0,
+          declined: Number(data.declined) || 0,
+          conditional: Number(data.conditional) || 0
         });
-
-        // Set Recent Activity from backend
         setRecentActivity(data.recentActivity || []);
         setAllCases(casesRes.data || []);
-
-        // Convert backend Map to Recharts Array format
         if (data.productDistribution) {
           const formattedProducts = Object.keys(data.productDistribution).map(key => ({
-            name: key,
-            value: data.productDistribution[key]
+            name: key, value: Number(data.productDistribution[key])
           }));
           setProductData(formattedProducts);
         }
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching dashboard data", error);
         setLoading(false);
       }
     };
-
     fetchDashboardData();
   }, []);
 
-  // Calculate Risk Distribution (0-100)
+  const pieData = useMemo(() => [
+    { name: 'Approved', value: stats.approved },
+    { name: 'Declined', value: stats.declined },
+    { name: 'Pending', value: stats.pendingReview },
+  ], [stats]);
+
   const riskData = useMemo(() => {
     const buckets = [
-      { range: '0-20', count: 0 },
-      { range: '21-40', count: 0 },
-      { range: '41-60', count: 0 },
-      { range: '61-80', count: 0 },
-      { range: '81-100', count: 0 },
+      { range: '0-1', count: 0 }, { range: '1-2', count: 0 },
+      { range: '2-3', count: 0 }, { range: '3-4', count: 0 },
+      { range: '4-5', count: 0 },
     ];
     allCases.forEach(c => {
-      const score = c.riskScore || 0;
-      if (score <= 20) buckets[0].count++;
-      else if (score <= 40) buckets[1].count++;
-      else if (score <= 60) buckets[2].count++;
-      else if (score <= 80) buckets[3].count++;
+      const score = Number(c.riskScore) || 0;
+      if (score <= 1) buckets[0].count++;
+      else if (score <= 2) buckets[1].count++;
+      else if (score <= 3) buckets[2].count++;
+      else if (score <= 4) buckets[3].count++;
       else buckets[4].count++;
     });
     return buckets;
   }, [allCases]);
-
-  // Derived data for Pie Chart
-  const pieData = [
-    { name: 'Approved', value: stats.approved },
-    { name: 'Declined', value: stats.declined },
-    { name: 'Pending', value: stats.pendingReview },
-  ];
 
   if (loading) return <div className="loader">Loading Dashboard...</div>;
 
@@ -99,94 +88,103 @@ const Dashboard = () => {
         <p>Overview of underwriting activities</p>
       </header>
 
-      {/* Stat Cards */}
+      {/* Stat Cards with React Icons */}
       <div className="stats-grid">
         <div className="stat-card">
-          <span>Total Proposals</span>
-          <div className="stat-value">{stats.totalProposals}</div>
-          <div className="stat-icon blue">📄</div>
+          <div className="stat-info">
+            <span>Total Proposals</span>
+            <div className="stat-value">{stats.totalProposals}</div>
+          </div>
+          <div className="stat-icon blue"><FiFileText size={24} /></div>
         </div>
         <div className="stat-card">
-          <span>Pending Review</span>
-          <div className="stat-value">{stats.pendingReview}</div>
-          <div className="stat-icon yellow">🕒</div>
+          <div className="stat-info">
+            <span>Pending Review</span>
+            <div className="stat-value">{stats.pendingReview}</div>
+          </div>
+          <div className="stat-icon yellow"><FiClock size={24} /></div>
         </div>
         <div className="stat-card">
-          <span>Approved</span>
-          <div className="stat-value">{stats.approved}</div>
-          <div className="stat-icon green">✅</div>
+          <div className="stat-info">
+            <span>Approved</span>
+            <div className="stat-value">{stats.approved}</div>
+          </div>
+          <div className="stat-icon green"><FiCheckCircle size={24} /></div>
         </div>
         <div className="stat-card">
-          <span>Declined</span>
-          <div className="stat-value">{stats.declined}</div>
-          <div className="stat-icon red">❌</div>
+          <div className="stat-info">
+            <span>Declined</span>
+            <div className="stat-value">{stats.declined}</div>
+          </div>
+          <div className="stat-icon red"><FiXCircle size={24} /></div>
         </div>
       </div>
 
-      {/* Main Charts Section */}
       <div className="charts-container">
+        {/* ... Decision Distribution Pie Chart stays the same ... */}
         <div className="chart-box">
-          <h3>Decisions Distribution</h3>
-          <div className="chart-wrapper">
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie data={pieData} innerRadius={60} outerRadius={80} dataKey="value" nameKey="name">
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+           <h3>Decisions Distribution</h3>
+           <ResponsiveContainer width="100%" height={250}>
+             <PieChart>
+               <Pie data={pieData} innerRadius={60} outerRadius={80} dataKey="value" nameKey="name">
+                 {pieData.map((entry, index) => (
+                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                 ))}
+               </Pie>
+               <Tooltip />
+               <Legend />
+             </PieChart>
+           </ResponsiveContainer>
         </div>
 
         <div className="chart-box">
           <h3>Proposals by Product</h3>
-          <div className="chart-wrapper">
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={productData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-
-      {/* Risk Distribution Chart */}
-      <div className="chart-box full-width">
-        <h3>Risk Score Distribution</h3>
-        <div className="chart-wrapper">
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={riskData}>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={productData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="range" />
+              <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="count" fill="#10b981" name="Number of Cases" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Recent Activity Section */}
-      <div className="chart-box full-width">
-        <h3>Recent Activity</h3>
-        <div className="activity-list">
-          {recentActivity.length > 0 ? recentActivity.map((activity) => (
-            <div key={activity.uwCaseId} className="activity-item">
-              <div className={`activity-dot ${(activity.decision || 'pending').toLowerCase()}`}></div>
-              <div className="activity-info">
-                <p><strong>Case #{activity.uwCaseId}</strong>: {activity.decision}</p>
-                <span>{activity.decisionDate ? new Date(activity.decisionDate).toLocaleString() : 'Recent'}</span>
+      <div className="charts-container aligned-row">
+        <div className="chart-box">
+          <h3>Risk Score Distribution</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={riskData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              {/* X-Axis with Name */}
+              <XAxis dataKey="range">
+                <Label value="Risk Score Range" offset={-10} position="insideBottom" />
+              </XAxis>
+              {/* Y-Axis with Name */}
+              <YAxis>
+                <Label value="Number of Cases" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
+              </YAxis>
+              <Tooltip />
+              <Bar dataKey="count" fill="#10b981" name="Cases" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* ... Recent Activity stays the same ... */}
+        <div className="chart-box scrollable-box">
+          <h3>Recent Activity</h3>
+          <div className="activity-list">
+            {recentActivity.map((activity, index) => (
+              <div key={index} className="activity-item">
+                <div className={`activity-dot ${activity.decision?.toLowerCase()}`}></div>
+                <div className="activity-info">
+                  <p><strong>Case #{activity.uwCaseId}</strong>: {activity.decision}</p>
+                  <span>{activity.decisionDate ? new Date(activity.decisionDate).toLocaleString() : 'Recent'}</span>
+                </div>
               </div>
-            </div>
-          )) : <p>No recent activity found.</p>}
+            ))}
+          </div>
         </div>
       </div>
     </div>

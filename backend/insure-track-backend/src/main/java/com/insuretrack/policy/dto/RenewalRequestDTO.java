@@ -6,4 +6,5 @@ import lombok.Data;
 public class RenewalRequestDTO {
     private Long policyId;
     private Double proposedPremium;
+
 }

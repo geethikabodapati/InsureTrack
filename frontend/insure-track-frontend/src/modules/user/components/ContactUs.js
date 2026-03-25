@@ -39,19 +39,19 @@ const ContactUs = () => {
                     <h2>Management Team</h2>
                     <div className="management-list">
                         <div className="manager-item">
-                            <h4>Sarah Jenkins</h4>
+                            <h4>Geethika Bodapati</h4>
                             <p>Chief Executive Officer</p>
-                            <a href="mailto:sarah.j@insuretrack.com">sarah.j@insuretrack.com</a>
+                            <a href="mailto:sarah.j@insuretrack.com">geethika@insuretrack.com</a>
                         </div>
                         <div className="manager-item">
-                            <h4>David Rodriguez</h4>
+                            <h4>Vasudha</h4>
                             <p>Chief Technology Officer</p>
-                            <a href="mailto:david.r@insuretrack.com">david.r@insuretrack.com</a>
+                            <a href="mailto:david.r@insuretrack.com">vasudha@insuretrack.com</a>
                         </div>
                         <div className="manager-item">
-                            <h4>Michael Chang</h4>
+                            <h4>Anusha</h4>
                             <p>Head of Client Relations</p>
-                            <a href="mailto:michael.c@insuretrack.com">michael.c@insuretrack.com</a>
+                            <a href="mailto:michael.c@insuretrack.com">anusha@insuretrack.com</a>
                         </div>
                     </div>
                 </div>

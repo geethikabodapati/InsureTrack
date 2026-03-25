@@ -15,4 +15,5 @@ public class PolicyResponseDTO {
     private LocalDate expiryDate;
     private Double premium;
     private String status;
+    private String customerName;
 }

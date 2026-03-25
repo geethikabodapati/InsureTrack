@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ClaimService {
 
-   // ClaimResponseDTO createClaim(ClaimRequestDTO dto);
+    ClaimResponseDTO createClaim(ClaimRequestDTO dto);
 
     ClaimResponseDTO getClaim(Long claimId);
 
@@ -21,4 +21,5 @@ public interface ClaimService {
     List<ClaimResponseDTO> getAllClaims();
     List<ClaimResponseDTO> getClaimsByStatus(String status);
 
+    List<ClaimResponseDTO> getClaimsByCustomerId(Long customerId);
 }

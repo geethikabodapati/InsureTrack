@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
+ 
 const PaymentsDashboard = () => {
   const [payments, setPayments]             = useState([]);
   const [loading, setLoading]               = useState(true);
   const [filter, setFilter]                 = useState('ALL');
   const [selectedPayment, setSelectedPayment] = useState(null);
-
+ 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
@@ -26,34 +26,34 @@ const PaymentsDashboard = () => {
     };
     fetchPayments();
   }, []);
-
+ 
   const totalPayments = payments.reduce((s, p) => s + p.amount, 0);
   const completed     = payments.filter(p => p.status === 'COMPLETED').reduce((s, p) => s + p.amount, 0);
   const pending       = payments.filter(p => p.status === 'PENDING').reduce((s, p) => s + p.amount, 0);
   const failed        = payments.filter(p => p.status === 'FAILED').reduce((s, p) => s + p.amount, 0);
-
+ 
   const filtered = filter === 'ALL' ? payments : payments.filter(p => p.status === filter);
-
+ 
   const statusBadgeClass = (status) => {
     if (status === 'COMPLETED') return 'it-badge it-badge-success';
     if (status === 'FAILED')    return 'it-badge it-badge-danger';
     return 'it-badge it-badge-warning';
   };
-
+ 
   return (
     <div className="it-page">
       <div className="it-page-header">
         <h1 className="it-page-title">Payments</h1>
         <p className="it-page-subtitle">Track and manage all payment transactions</p>
       </div>
-
+ 
       {/* KPI Stats */}
       <div className="it-stat-grid">
         {[
-          { label: 'Total Payments', value: `$${totalPayments.toLocaleString()}`, color: '#EFF6FF', ic: '#1E3A8A' },
-          { label: 'Completed',      value: `$${completed.toLocaleString()}`,     color: '#F0FDF4', ic: '#16A34A' },
-          { label: 'Pending',        value: `$${pending.toLocaleString()}`,       color: '#FEF3C7', ic: '#B45309' },
-          { label: 'Failed',         value: `$${failed.toLocaleString()}`,        color: '#FEE2E2', ic: '#DC2626' },
+          { label: 'Total Payments', value: `₹${totalPayments.toLocaleString()}`, color: '#EFF6FF', ic: '#1E3A8A' },
+          { label: 'Completed',      value: `₹${completed.toLocaleString()}`,     color: '#F0FDF4', ic: '#16A34A' },
+          { label: 'Pending',        value: `₹${pending.toLocaleString()}`,       color: '#FEF3C7', ic: '#B45309' },
+          { label: 'Failed',         value: `₹${failed.toLocaleString()}`,        color: '#FEE2E2', ic: '#DC2626' },
         ].map(s => (
           <div key={s.label} className="it-stat-card">
             <div>
@@ -66,7 +66,7 @@ const PaymentsDashboard = () => {
           </div>
         ))}
       </div>
-
+ 
       {/* Filter Tabs */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
         {['ALL','COMPLETED','PENDING','FAILED'].map(f => (
@@ -82,7 +82,7 @@ const PaymentsDashboard = () => {
           🖨 Print
         </button>
       </div>
-
+ 
       {/* Table */}
       <div className="it-table-wrapper">
         {loading ? (
@@ -103,7 +103,7 @@ const PaymentsDashboard = () => {
                   <td>#{pay.paymentId}</td>
                   <td>{pay.invoiceId}</td>
                   <td>{pay.customerName}</td>
-                  <td>${pay.amount?.toLocaleString()}</td>
+                  <td>₹{pay.amount?.toLocaleString()}</td>
                   <td>{pay.paidDate}</td>
                   <td>{pay.method}</td>
                   <td><span className={statusBadgeClass(pay.status)}>{pay.status}</span></td>
@@ -118,7 +118,7 @@ const PaymentsDashboard = () => {
           </table>
         )}
       </div>
-
+ 
       {/* Details Modal */}
       {selectedPayment && (
         <div className="it-modal-overlay" onClick={() => setSelectedPayment(null)}>
@@ -146,5 +146,5 @@ const PaymentsDashboard = () => {
     </div>
   );
 };
-
+ 
 export default PaymentsDashboard;

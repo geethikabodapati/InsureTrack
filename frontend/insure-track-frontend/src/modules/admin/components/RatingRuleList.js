@@ -1,65 +1,92 @@
 import React, { useEffect, useState } from 'react';
-import { getAllRatingRules, addRatingRule } from '../../../core/services/api'; 
-import { MoreVertical, X, Search, ChevronLeft, ChevronRight, Inbox, SearchX } from 'lucide-react'; 
+import { 
+    getAllRatingRules, 
+    deleteRatingRule, 
+    getAllProducts 
+} from '../../../core/services/api'; 
+import { 
+    Search, ChevronLeft, ChevronRight, 
+    Inbox, SearchX, Trash2, AlertCircle 
+} from 'lucide-react'; 
 import '../styles/AdminTables.css'; 
 
 const RatingRuleList = () => {
+    // --- DATA STATES ---
     const [rules, setRules] = useState([]);
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [isModalOpen, setIsModalOpen] = useState(false);
     
-    // --- PAGINATION STATE ---
+    // --- UI STATES ---
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10); 
 
-    const [formData, setFormData] = useState({
-        expression: '',
-        factor: '',
-        weight: '',
-        productId: ''
-    });
-
-    const fetchRules = () => {
+    // --- FETCH DATA (Rules + Products for Name Mapping) ---
+    const fetchData = async () => {
         setLoading(true);
-        getAllRatingRules()
-            .then(response => {
-                const data = response.data || response;
-                setRules(Array.isArray(data) ? data : []);
-                setLoading(false);
-                setError(null);
-            })
-            .catch(err => {
-                setError("Failed to fetch rating rules.");
-                setLoading(false);
-            });
-    };
-
-    useEffect(() => {
-        fetchRules();
-    }, []);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
         try {
-            const { productId, ...ruleData } = formData;
-            await addRatingRule(productId, ruleData);
-            setIsModalOpen(false);
-            setFormData({ expression: '', factor: '', weight: '', productId: '' });
-            fetchRules();
+            const [rulesRes, productsRes] = await Promise.all([
+                getAllRatingRules(),
+                getAllProducts()
+            ]);
+            console.log(rulesRes,productsRes)
+
+            // Handling potential nested data structures from Axios
+            const rulesData = rulesRes.data || rulesRes;
+            const productsData = productsRes.data || productsRes;
+
+            setRules(Array.isArray(rulesData) ? rulesData : []);
+            setProducts(Array.isArray(productsData) ? productsData : []);
+            setError(null);
         } catch (err) {
-            alert("Error adding rule. Check if Product ID exists.");
+            console.error("Fetch error:", err);
+            setError("Failed to sync with the database. Please check your connection.");
+        } finally {
+            setLoading(false);
         }
     };
 
-    // 1. Filter logic
-    const filteredRules = rules.filter(rule => 
-        rule.factor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        rule.expression?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    // 2. Pagination Calculation
+    // --- DELETE LOGIC ---
+    const handleDelete = async (ruleId) => {
+        if (window.confirm("Are you sure you want to delete this rating rule?")) {
+            try {
+                await deleteRatingRule(ruleId);
+                
+                // Optimistic UI Update: Filter out the deleted rule from local state
+                setRules(prevRules => prevRules.filter(rule => (rule.ruleId || rule.id) !== ruleId));
+                
+                // Adjust pagination if the last item on the page was deleted
+                if (currentRows.length === 1 && currentPage > 1) {
+                    setCurrentPage(prev => prev - 1);
+                }
+            } catch (err) {
+                alert("Error deleting rule. It might still be linked to active policies.");
+            }
+        }
+    };
+
+    // --- HELPER: Map Product ID to Name ---
+    const getProductName = (id) => {
+        const product = products.find(p => String(p.productId) === String(id) || String(p.id) === String(id));
+        return product ? product.name : `Unknown Product (ID: ${id})`;
+    };
+
+    // --- FILTER & PAGINATION LOGIC ---
+    const filteredRules = rules.filter(rule => {
+        const prodName = getProductName(rule.productId).toLowerCase();
+        const search = searchTerm.toLowerCase();
+        return (
+            rule.factor?.toLowerCase().includes(search) ||
+            rule.expression?.toLowerCase().includes(search) ||
+            prodName.includes(search)
+        );
+    });
+
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = filteredRules.slice(indexOfFirstRow, indexOfLastRow);
@@ -82,111 +109,128 @@ const RatingRuleList = () => {
 
     return (
         <div className="table-container">
+            {/* Header Section */}
             <div className="table-header-section">
                 <div className="table-title">
-                    <h1>Rating Rules</h1>
-                    <p>Configure premium calculation logic</p>
+                    <h1>Rating Rules Engine</h1>
+                    <p>View and manage existing premium multipliers</p>
                 </div>
+                {/* "Define New Rule" button removed as it's handled in ProductList.js */}
             </div>
 
             <div className="table-card">
-                {/* --- SEARCH & ENTRIES CONTROLS --- */}
+                {/* Search & Entries Controls */}
                 <div className="table-controls-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px' }}>
-                    <div className="search-wrapper" style={{ width: '300px', position: 'relative' }}>
+                    <div className="search-wrapper" style={{ width: '350px', position: 'relative' }}>
                         <Search className="search-icon" size={18} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                         <input 
                             type="text" 
-                            placeholder="Search rules..." 
+                            placeholder="Search by factor, formula, or product..." 
                             className="search-input-field"
-                            style={{ paddingLeft: '35px', width: '100%', height: '38px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                            style={{ paddingLeft: '35px', width: '100%', height: '40px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
                     </div>
 
                     <div className="page-length" style={{ color: '#64748b', fontSize: '14px' }}>
-                        Show 
+                        Display 
                         <select 
                             value={rowsPerPage} 
                             onChange={(e) => {setRowsPerPage(Number(e.target.value)); setCurrentPage(1);}}
-                            style={{ margin: '0 8px', padding: '6px 10px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#fff' }}
+                            style={{ margin: '0 8px', padding: '6px 10px', borderRadius: '6px', border: '1px solid #e2e8f0' }}
                         >
                             <option value={5}>5</option>
                             <option value={10}>10</option>
                             <option value={25}>25</option>
                         </select> 
-                        entries
+                        rows
                     </div>
                 </div>
 
                 {loading ? (
-                    <div className="loading-text" style={{padding: '60px', textAlign: 'center', color: '#64748b'}}>Loading rules...</div>
+                    <div style={{padding: '100px', textAlign: 'center'}}>
+                        <div className="spinner"></div>
+                        <p style={{ color: '#64748b', marginTop: '10px' }}>Loading rules...</p>
+                    </div>
                 ) : error ? (
-                    <div className="error-box" style={{padding: '40px', color: '#ef4444', textAlign: 'center'}}>
-                        <strong>{error}</strong>
+                    <div style={{padding: '60px', textAlign: 'center', color: '#ef4444'}}>
+                        <AlertCircle size={40} style={{ margin: '0 auto 10px' }} />
+                        <p><strong>{error}</strong></p>
                     </div>
                 ) : (
                     <>
-                        {/* --- CASE 1: No rules exist in the database at all --- */}
                         {rules.length === 0 ? (
                             <div style={{ padding: '80px 20px', textAlign: 'center', color: '#64748b' }}>
                                 <Inbox size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
-                                <h3 style={{ color: '#1e293b', marginBottom: '8px' }}>No rules available</h3>
-                                <p>There are currently no rating rules configured in the system.</p>
+                                <h3>No Rules Found</h3>
+                                <p>There are currently no rating rules defined in the system.</p>
                             </div>
-                        ) : 
-                        /* --- CASE 2: Rules exist, but search filter returned nothing --- */
-                        filteredRules.length === 0 ? (
+                        ) : filteredRules.length === 0 ? (
                             <div style={{ padding: '80px 20px', textAlign: 'center', color: '#64748b' }}>
                                 <SearchX size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
-                                <h3 style={{ color: '#1e293b', marginBottom: '8px' }}>No matches found</h3>
-                                <p>We couldn't find any rules matching "<strong>{searchTerm}</strong>"</p>
-                                <button 
-                                    onClick={() => setSearchTerm("")}
-                                    style={{ marginTop: '16px', color: '#3b82f6', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}
-                                >
-                                    Clear all filters
-                                </button>
+                                <h3>No Matches Found</h3>
+                                <p>No results for "<strong>{searchTerm}</strong>"</p>
                             </div>
                         ) : (
-                            /* --- CASE 3: Display the data table --- */
                             <>
                                 <table className="data-table">
                                     <thead>
                                         <tr>
-                                            <th>Rule ID</th>
-                                            <th>Expression</th>
-                                            <th>Factor</th>
+                                            <th>Applied Formula</th>
+                                            <th>Rating Factor</th>
                                             <th>Weight</th>
-                                            <th>Product</th>
-                                            <th></th>
+                                            <th>Target Product</th>
+                                            <th style={{ textAlign: 'right' }}>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {currentRows.map((rule) => (
                                             <tr key={rule.ruleId || rule.id}>
-                                                <td>RR-00{rule.ruleId || rule.id}</td>
-                                                <td><code>{rule.expression}</code></td>
+                                                <td>
+                                                    <code style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', color: '#1e40af', fontSize: '13px' }}>
+                                                        {rule.expression}
+                                                    </code>
+                                                </td>
                                                 <td><span className="status-badge status-active">{rule.factor}</span></td>
-                                                <td>{rule.weight}</td>
-                                                <td>PRD-{rule.productId}</td>
+                                                <td style={{ fontWeight: '600' }}>{rule.weight}</td>
+                                                <td style={{ color: '#1e293b', fontWeight: '500' }}>
+                                                    {getProductName(rule.productId)}
+                                                </td>
                                                 <td style={{ textAlign: 'right' }}>
-                                                    <button className="action-btn"><MoreVertical size={18}/></button>
+                                                    <button 
+                                                        className="delete-action-btn" 
+                                                        onClick={() => handleDelete(rule.ruleId || rule.id)}
+                                                        title="Delete Rule"
+                                                        style={{ 
+                                                            padding: '8px', 
+                                                            borderRadius: '6px', 
+                                                            border: 'none', 
+                                                            background: 'transparent', 
+                                                            color: '#ef4444', 
+                                                            cursor: 'pointer',
+                                                            transition: 'background 0.2s'
+                                                        }}
+                                                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                                                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                                    >
+                                                        <Trash2 size={19}/>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
 
-                                {/* --- FOOTER --- */}
+                                {/* Pagination Footer */}
                                 <div className="table-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', borderTop: '1px solid #f1f5f9' }}>
-                                    <div style={{ fontSize: '14px', color: '#64748b' }}>
-                                        Showing {indexOfFirstRow + 1} to {Math.min(indexOfLastRow, filteredRules.length)} of {filteredRules.length} entries
+                                    <div style={{ fontSize: '13px', color: '#64748b' }}>
+                                        Showing {indexOfFirstRow + 1} to {Math.min(indexOfLastRow, filteredRules.length)} of {filteredRules.length} rules
                                     </div>
 
                                     <div className="pagination-controls" style={{ display: 'flex', gap: '5px' }}>
                                         <button className="page-nav-btn" disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} style={navBtnStyle}>
-                                            <ChevronLeft size={16} /> Previous
+                                            <ChevronLeft size={16} />
                                         </button>
 
                                         {getPaginationGroup().map((item) => (
@@ -206,7 +250,7 @@ const RatingRuleList = () => {
                                         ))}
 
                                         <button className="page-nav-btn" disabled={currentPage === totalPages || totalPages === 0} onClick={() => setCurrentPage(prev => prev + 1)} style={navBtnStyle}>
-                                            Next <ChevronRight size={16} />
+                                            <ChevronRight size={16} />
                                         </button>
                                     </div>
                                 </div>
@@ -215,46 +259,13 @@ const RatingRuleList = () => {
                     </>
                 )}
             </div>
-
-            {/* Modal remains available (can be triggered by parent or other logic) */}
-            {isModalOpen && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h2>Add Rating Rule</h2>
-                            <button className="close-x" onClick={() => setIsModalOpen(false)}><X size={20}/></button>
-                        </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label>Expression</label>
-                                <input type="text" value={formData.expression} onChange={(e) => setFormData({...formData, expression: e.target.value})} required />
-                            </div>
-                            <div className="form-group">
-                                <label>Factor</label>
-                                <input type="text" value={formData.factor} onChange={(e) => setFormData({...formData, factor: e.target.value})} required />
-                            </div>
-                            <div className="form-group">
-                                <label>Weight</label>
-                                <input type="number" value={formData.weight} onChange={(e) => setFormData({...formData, weight: e.target.value})} required />
-                            </div>
-                            <div className="form-group">
-                                <label>Product ID</label>
-                                <input type="number" value={formData.productId} onChange={(e) => setFormData({...formData, productId: e.target.value})} required />
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                                <button type="submit" className="btn-confirm">Save Rule</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
 
+// Reusable Button Styles
 const navBtnStyle = {
-    display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', fontSize: '14px', cursor: 'pointer', color: '#64748b', transition: 'all 0.2s'
+    display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', color: '#64748b', transition: 'all 0.2s'
 };
 
 const pageNumStyle = {

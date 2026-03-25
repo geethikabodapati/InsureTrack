@@ -7,4 +7,5 @@ public class EndorsementRequestDTO {
     private Long policyId;
     private String changeType;
     private Double premiumDelta;
+
 }

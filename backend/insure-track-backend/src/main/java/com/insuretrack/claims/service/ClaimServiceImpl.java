@@ -3,27 +3,18 @@ package com.insuretrack.claims.service;
 import com.insuretrack.claims.dto.ClaimRequestDTO;
 import com.insuretrack.claims.dto.ClaimResponseDTO;
 import com.insuretrack.claims.entity.Claim;
-import com.insuretrack.claims.entity.ClaimAssignment;
-import com.insuretrack.claims.entity.Reserve;
-import com.insuretrack.claims.entity.Settlement;
-import com.insuretrack.claims.repository.ClaimAssignmentRepository;
 import com.insuretrack.claims.repository.ClaimRepository;
-import com.insuretrack.claims.repository.ReserveRepository;
-import com.insuretrack.claims.repository.SettlementRepository;
 import com.insuretrack.common.enums.ClaimStatus;
-import com.insuretrack.common.enums.NotificationCategory;
 import com.insuretrack.notification.service.NotificationService;
 import com.insuretrack.policy.entity.Policy;
 import com.insuretrack.policy.repository.PolicyRepository;
-import com.insuretrack.user.entity.User;
-import com.insuretrack.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,22 +25,22 @@ public class ClaimServiceImpl implements ClaimService {
     private final PolicyRepository policyRepository;
     private final NotificationService notificationService;
 
-//    @Override
-//    public ClaimResponseDTO createClaim(ClaimRequestDTO dto) {
-//
-//        Policy policy = policyRepository.findById(dto.getPolicyId())
-//                .orElseThrow(() -> new RuntimeException("Policy not found"));
-//
-//        Claim claim = Claim.builder()
-//                .policy(policy)
-//                .incidentDate(dto.getIncidentDate())
-//                .reportedDate(LocalDate.now())
-//                .claimType(dto.getClaimType())
-//                .description(dto.getDescription())
-//                .status(ClaimStatus.OPEN)
-//                .build();
-//
-//        claimRepository.save(claim);
+    @Override
+    public ClaimResponseDTO createClaim(ClaimRequestDTO dto) {
+
+        Policy policy = policyRepository.findById(dto.getPolicyId())
+                .orElseThrow(() -> new RuntimeException("Policy not found"));
+
+        Claim claim = Claim.builder()
+                .policy(policy)
+                .incidentDate(dto.getIncidentDate())
+                .reportedDate(LocalDate.now())
+                .claimType(dto.getClaimType())
+                .description(dto.getDescription())
+                .status(ClaimStatus.OPEN)
+                .build();
+
+        claimRepository.save(claim);
 //        notificationService.createNotification(
 //                policy.getQuote().getCustomer().getCustomerId(),
 //                "Claim generated for Policy " + policy.getPolicyNumber(),
@@ -59,8 +50,8 @@ public class ClaimServiceImpl implements ClaimService {
 //                "New FNOL filed: " + claim.getClaimId() + ". Needs triage.",
 //                NotificationCategory.ASSIGNMENT
 //        );
-//        return mapToResponse(claim);
-//    }
+        return mapToResponse(claim);
+    }
 
     @Override
     public ClaimResponseDTO moveToReview(Long id) {
@@ -74,17 +65,9 @@ public class ClaimServiceImpl implements ClaimService {
     public ClaimResponseDTO approveClaim(Long id) {
         Claim claim = getClaimEntity(id);
         validate(claim, ClaimStatus.INVESTIGATING);
-        claim.setStatus(ClaimStatus.SETTLED);
+        claim.setStatus(ClaimStatus.ADJUDICATED);
         return mapToResponse(claim);
     }
-
-//    @Override
-//    public ClaimResponseDTO rejectClaim(Long id) {
-//        Claim claim = getClaimEntity(id);
-//        validate(claim, ClaimStatus.INVESTIGATING);
-//        claim.setStatus(ClaimStatus.DENIED);
-//        return mapToResponse(claim);
-//    }
 
     @Override
     public ClaimResponseDTO rejectClaim(Long id) {
@@ -140,16 +123,24 @@ public class ClaimServiceImpl implements ClaimService {
         if (claim.getStatus() != expected)
             throw new RuntimeException("Invalid status transition");
     }
-
+    @Override
+    public List<ClaimResponseDTO> getClaimsByCustomerId(Long customerId) {
+        List<Claim> claims = claimRepository.findByPolicy_Quote_Customer_CustomerId(customerId);
+        return claims.stream().map(this::mapToResponse).toList();
+    }
     private ClaimResponseDTO mapToResponse(Claim claim) {
+        Policy policy=claim.getPolicy();
         return ClaimResponseDTO.builder()
                 .claimId(claim.getClaimId())
-                .policyId(claim.getPolicy().getPolicyId())
+                .policyId(policy != null ? policy.getPolicyId() : null)
+                .policyNumber(policy != null ? policy.getPolicyNumber() : null)  // ← ADD
                 .incidentDate(claim.getIncidentDate())
                 .reportedDate(claim.getReportedDate())
                 .claimType(claim.getClaimType())
                 .description(claim.getDescription())
-                .status(claim.getStatus().name())
+                .status(claim.getStatus() != null
+                        ? claim.getStatus().name()
+                        : null)
                 .build();
     }
 }

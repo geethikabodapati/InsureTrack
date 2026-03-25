@@ -1,6 +1,7 @@
 package com.insuretrack.user.controller;
 
 import com.insuretrack.user.dto.LoginRequestDTO;
+import com.insuretrack.user.entity.AuditLog;
 import com.insuretrack.user.service.AuthService;
 import com.insuretrack.user.dto.UserRequestDTO;
 import com.insuretrack.user.dto.UserResponseDTO;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -51,6 +54,10 @@ public class AuthController {
         // We only need the password from LoginRequestDTO
         authService.resetPassword(token, request.getPassword());
         return ResponseEntity.ok("Password reset successfully.");
+    }
+    @GetMapping("/auditlogs")
+    public ResponseEntity<List<AuditLog>> getAuditLogs() {
+        return ResponseEntity.ok(authService.getAllAuditLogs());
     }
 }
 

@@ -10,20 +10,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customer/endorsements")
+@RequestMapping("/api") // Base mapping for all endpoints in this controller
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class EndorsementController {
+
     private final EndorsementService endorsementService;
-    @PostMapping
+
+    // Final URL: POST /api/customer/endorsements
+    @PostMapping("/customers/endorsements")
     public ResponseEntity<EndorsementResponseDTO> create(@RequestBody EndorsementRequestDTO requestDTO){
         return ResponseEntity.ok(endorsementService.create(requestDTO));
     }
-    @GetMapping
+
+    // Final URL: GET /api/agent/endorsements
+    @GetMapping("/agent/endorsements")
     public ResponseEntity<List<EndorsementResponseDTO>> getAll() {
         return ResponseEntity.ok(endorsementService.getAllEndorsements());
     }
-    @PutMapping("/{id}/approve")
+
+    // Final URL: PUT /api/agent/endorsements/{id}/approve
+    @PutMapping("/agent/endorsements/{id}/approve")
     public ResponseEntity<EndorsementResponseDTO> approve(@PathVariable Long id) {
         return ResponseEntity.ok(endorsementService.approveEndorsement(id));
     }
+
 }

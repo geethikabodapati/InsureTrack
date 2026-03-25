@@ -1,0 +1,109 @@
+/* Stats Grid Layout */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+ 
+/* Dashboard Card Styling */
+.overview-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+}
+ 
+.overview-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border-color: #3b82f6;
+}
+ 
+/* Card Content */
+.card-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+ 
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+ 
+.card-link {
+    font-size: 0.813rem;
+    color: #64748b;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+ 
+/* Icon Containers from Screenshot */
+.icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ 
+.bg-blue-soft { background-color: #eff6ff; color: #3b82f6; }
+.bg-purple-soft { background-color: #f5f3ff; color: #8b5cf6; }
+.bg-green-soft { background-color: #f0fdf4; color: #22c55e; }
+.bg-orange-soft { background-color: #fff7ed; color: #f97316; }
+
+
+/* Dashboard Content Wrapper */
+.main-wrapper {
+  margin-left: 260px;
+  padding: 2rem 3rem;
+}
+ 
+/* Stat Card Styling */
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #f1f1f4;
+  box-shadow: var(--card-shadow);
+}
+ 
+.stat-icon-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f8fafc;
+  margin-bottom: 1rem;
+}
+
+/* Table overrides */
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #f1f1f4;
+}
+ 
+.table thead {
+  background-color: #f9fafb;
+}
+ 
+.badge-retail {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #d1fae5;
+  padding: 0.35em 1em;
+  border-radius: 50px;
+}/* Temporary to see if it works */

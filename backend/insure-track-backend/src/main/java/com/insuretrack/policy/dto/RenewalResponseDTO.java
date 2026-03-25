@@ -13,4 +13,8 @@ public class RenewalResponseDTO {
     private Double proposedPremium;
     private LocalDate offerDate;
     private String status;
+    private String policyNumber;    // Added
+    private String customerName;    // Added
+    private String productName;     // Added (e.g., CAR, BIKE)
+    private Double currentPremium;  // Added
 }

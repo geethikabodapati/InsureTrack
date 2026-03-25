@@ -4,21 +4,17 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import PublicLayout from '../../modules/user/components/PublicLayout';
 import AboutUs from '../../modules/user/components/AboutUs';
 import ContactUs from '../../modules/user/components/ContactUs';
-
 import LandingPage from '../components/LandingPage';
 import Login from '../../modules/user/components/Login';
 import Register from '../../modules/user/components/Register';
-// import Dashboard from '../../core/components/Dashboard';
-// import AdminDashboard from '../../modules/admin/components/AdminDashboard';
-import CustomerDashboard from '../../modules/customer/components/CustomerDashboard';
 import RegisterUser from '../../modules/admin/components/RegisterUser';
 import ForgotPassword from '../../modules/user/components/ForgotPassword';
 import ResetPassword from '../../modules/user/components/ResetPassword';
 //Underwriting imports
-import Layout from '../../modules/underwriter/components/Layout';
+import UnderwriterLayout from '../../modules/underwriter/components/UnderwriterLayout';
 import Dashboard from '../../modules/underwriter/pages/Dashboard';
 import UnderwritingCases from '../../modules/underwriter/pages/UnderwriterCases';
-import RiskAssessment from '../../modules/underwriter/pages/RiskAssessment';
+import LookUpCase from '../../modules/underwriter/pages/LookUpCase';
 import Reports from '../../modules/underwriter/pages/Reports';
 import Notifications from '../../modules/underwriter/pages/Notifications';
 import Settings from '../../modules/underwriter/pages/Settings';
@@ -33,7 +29,6 @@ import AnalystLayout from '../../modules/analyst/AnalystLayout';
 import AnalystOverview from '../../modules/analyst/components/AnalystOverview';
 
 //Admin
-
 import AdminLayout from '../../modules/admin/components/AdminLayout';
 import AdminDashboard from '../../modules/admin/components/AdminDashboard';
 import ProductList from '../../modules/admin/components/ProductList';
@@ -44,7 +39,6 @@ import AuditLogList from '../../modules/admin/components/AuditLogList';
 import AdminSettings from '../../modules/admin/components/AdminSettings';
 
 //Agent
-// Import the Agent Module components
 import AgentDashboard from '../../modules/agent/AgentDashboard';
 import AgentLayout from '../../modules/agent/AgentLayout';
 import QuoteManagement from '../../modules/agent/components/QuoteManagement';
@@ -54,7 +48,7 @@ import CancellationManagement from '../../modules/agent/components/CancellationM
 import RenewalManagement from '../../modules/agent/components/RenewalManagement';
 
 //Adjuster
-import { Layout as AdjusterLayout } from '../../modules/adjuster/components/Layout';
+import AdjusterLayout  from '../../modules/adjuster/components/Layout';
 import { Dashboard as AdjusterDashboard } from '../../modules/adjuster/pages/AdjusterDashboard';
 import { FNOLIntake } from '../../modules/adjuster/pages/FNOLIntake';
 import { MyClaims } from '../../modules/adjuster/pages/MyClaims';
@@ -66,9 +60,21 @@ import { Evidence } from '../../modules/adjuster/pages/Evidence';
 import { Reports as AdjusterReports } from '../../modules/adjuster/pages/Reports';
 import { Notifications as AdjusterNotifications } from '../../modules/adjuster/pages/Notifications';
 import { Settings as AdjusterSettings } from '../../modules/adjuster/pages/Settings';
-import UnderwriterLayout from '../../modules/underwriter/UnderwriterLayout';
 import DashboardStats from '../../modules/agent/components/DashboardStats';
 
+//Customer
+import  DashboardLayout  from '../../modules/customer/components/DashboardLayout';
+import  Customers  from '../../modules/customer/components/Customers';
+import  Beneficiaries  from '../../modules/customer/components/Beneficiaries';
+import  InsuredObjects  from '../../modules/customer/components/InsuredObjects';
+import  DashboardHome  from '../../modules/customer/components/DashboardHome';
+import  Policies  from '../../modules/customer/components/Policies';
+import  Claims  from '../../modules/customer/components/Claims';
+import  Payments  from '../../modules/customer/components/Payments';
+import  MyProfile  from '../../modules/customer/components/Profile';
+import Coverages from '../../modules/customer/components/Coverages';
+import Quotes from '../../modules/customer/components/Quotes';
+import Overview from '../../modules/customer/components/Overview';
 
 function AppRoutes() {
     const token = localStorage.getItem("token");
@@ -87,15 +93,12 @@ function AppRoutes() {
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/register/user" element={<RegisterUser />} />
                 </Route>
-
-                {/* <Route path="/admin-dashboard" element={token ? <AdminDashboard/> : <Navigate to="/login" />} /> */}
-                <Route path="/customer-dashboard" element={token ? <CustomerDashboard /> : <Navigate to="/login" />} />
-                <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
+                
                 {/* --- Underwriter Dashboard Group --- */}
                 <Route path="/underwriter-dashboard" element={<UnderwriterLayout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="cases" element={<UnderwritingCases />} />
-                    <Route path="risk-assessment/:id" element={<RiskAssessment />} />
+                    <Route path="lookup-case/:id" element={<LookUpCase />} />
                     <Route path="reports" element={<Reports />} />
                     <Route path="notifications" element={<Notifications />} />
                     <Route path="settings" element={<Settings />} />
@@ -106,7 +109,7 @@ function AppRoutes() {
                     <Route path="/billing" element={token ? <BillingDashboard /> : <Navigate to="/" />} />
                     <Route path="/payments" element={token ? <PaymentsDashboard /> : <Navigate to="/" />} />
                     <Route path="/claims" element={token ? <ClaimsDashboard /> : <Navigate to="/" />} />
-                    <Route path="/refund" element={token ? <RefundDashboard /> : <Navigate to="/" />} />
+                    <Route path="/refunds" element={token ? <RefundDashboard /> : <Navigate to="/" />} />
                 </Route>
 
                 <Route element={token ? <AdminLayout /> : <Navigate to="/login" />}>
@@ -118,15 +121,27 @@ function AppRoutes() {
                     <Route path="/admin-logs" element={<AuditLogList />} />
                     <Route path="admin-settings" element={<AdminSettings />} />
                 </Route>
+                {/* Customer Dashboard - Nested */}
+            <Route path="/customer-dashboard" element={token ? <DashboardLayout /> : <Navigate to="/login" />} >
+            <Route index element={token ? <DashboardHome /> : <Navigate to="/login" />} />
+            <Route path="overview" element={<Overview />} />
+            <Route path="profile" element={<Customers />} />
+            <Route path="beneficiaries" element={<Beneficiaries />} />
+            <Route path="insured-objects" element={<InsuredObjects />} />
+            <Route path="policies" element={<Policies />} />
+            <Route path="claims" element={<Claims />} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="my-profile" element={<MyProfile/>} />
+            <Route path="Coverages" element={<Coverages/>}/>
+            <Route path="Quotes" element={<Quotes/>}/>
+            </Route>
 
                 {/* Catch-all redirect */}
-                {/* <Route path="*" element={<Navigate to="/login" />} /> */}
-                {/* --- AGENT ROUTES WRAPPED IN LAYOUT --- */}
+                <Route path="*" element={<Navigate to="/login" />} />
+                {/* --- AGENT ROUTES ---*/}
                 <Route
                     path="/agent-dashboard"
-                    element={token ? <AgentLayout /> : <Navigate to="/login" />}
-                >
-                    {/* These will automatically render inside the AgentLayout Outlet */}
+                    element={token ? <AgentLayout /> : <Navigate to="/login" />}>
                     <Route index element={token ? <AgentDashboard /> : <Navigate to="/login" />} />
                     <Route path="" element={<DashboardStats />} />
                     <Route path="quotes" element={<QuoteManagement />} />
@@ -134,15 +149,13 @@ function AppRoutes() {
                     <Route path="endorsements" element={<EndorsementManagement />} />
                     <Route path="renewals" element={<RenewalManagement />} />
                     <Route path="cancellations" element={<CancellationManagement />} />
-                    {/* You can easily add endorsements, claims, etc. here later */}
+                    
                 </Route>
                 {/* ── Adjuster ── */}
                 <Route
                     path="/adjuster-dashboard"
                     element={
-                        <AdjusterLayout />
-                    }
-                >
+                        <AdjusterLayout />}>
                     <Route index element={<AdjusterDashboard />} />
                     <Route path="fnol" element={<FNOLIntake />} />
                     <Route path="myclaims" element={<MyClaims />} />

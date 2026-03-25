@@ -39,4 +39,8 @@ public class PolicyController {
                 policyService.getPolicy(policyId)
         );
     }
+    @GetMapping("/customers/{customerId}")
+    public ResponseEntity<List<PolicyResponseDTO>> getPoliciesByCustomer(@PathVariable Long customerId) {
+        return ResponseEntity.ok(policyService.getPoliciesByCustomerId(customerId));
+    }
 }

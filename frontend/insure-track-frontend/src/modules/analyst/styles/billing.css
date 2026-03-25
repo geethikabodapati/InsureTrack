@@ -4,7 +4,7 @@
   margin-bottom: 30px;
   padding:10px;
 }
-
+ 
 .kpi-cards .card1, .card2, .card3 {
   background: white;
   color:white;
@@ -14,7 +14,7 @@
   flex: 1;
   font-weight: bold;
 }
-
+ 
 .kpi-cards .card1{
 background-color:#5478FF;
 }
@@ -24,21 +24,21 @@ background-color:#08CB00;
 .kpi-cards .card3{
 background-color:#FF6F3C;
 }
-
+ 
 .c1,.c2,.c3{
 color :white;
 font-size:25px;
 }
-
-
-
-
+ 
+ 
+ 
+ 
 .invoice-tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
 }
-
+ 
 .invoice-tabs .tab {
   padding: 8px 16px;
   border: none;
@@ -46,18 +46,18 @@ font-size:25px;
   border-radius: 4px;
   cursor: pointer;
 }
-
+ 
 .invoice-tabs .tab.active {
   background: #2563eb;
   color: white;
 }
-
+ 
 .invoice-actions {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
-
+ 
 .export-btn,
 .create-btn {
   background: #2563eb;
@@ -67,14 +67,14 @@ font-size:25px;
   border-radius: 4px;
   cursor: pointer;
 }
-
+ 
 .invoice-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
+ 
 .invoice-table th,
 .invoice-table td {
   padding: 12px;
@@ -88,48 +88,48 @@ font-size:25px;
   font-weight: bold;
   font-size: 0.9em;
 }
-
+ 
 .status-paid {
-  background-color: #d4edda; 
+  background-color: #d4edda;
   color: #155724;          
 }
-
+ 
 .status-open {
-  background-color: #cce5ff; 
-  color: #004085;           
+  background-color: #cce5ff;
+  color: #004085;          
 }
-
+ 
 .status-overdue {
-  background-color: #fff3cd; 
+  background-color: #fff3cd;
   color: #856404;            
 }
-
+ 
 .status-cancelled {
-  background-color: #f8d7da; 
+  background-color: #f8d7da;
   color: #721c24;            
 }
-
+ 
 .invoice-table {
     width: 100%;
     border-collapse: collapse;
 }
-
-
+ 
+ 
 .invoice-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
-
-
+ 
+ 
 .invoice-table tr:hover {
     background-color: #ddd;
 }
-
-
-
+ 
+ 
+ 
 .status-nav {
   margin-bottom: 15px;
 }
-
+ 
 .status-nav button {
   margin-right: 20px;
   padding: 7px 14px;
@@ -140,25 +140,25 @@ font-size:25px;
   font-weight: bold;
   font-size: 15px;
 }
-
+ 
 .status-nav button.active {
   background-color: #007bff;
   color: white;
 }
-
+ 
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(236, 228, 228, 0.5); 
+  background: rgba(236, 228, 228, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
-
+ 
 .modal-content {
   background: white;
   padding: 20px;
@@ -168,7 +168,7 @@ font-size:25px;
   position: relative;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-
+ 
 .close-btn {
   position: absolute;
   top: 10px;
@@ -178,5 +178,3 @@ font-size:25px;
   font-size: 20px;
   cursor: pointer;
 }
-
-

@@ -72,12 +72,11 @@ const Register = () => {
             <div className="info-pane">
                 <div className="brand-badge">InsureTrack</div>
                 <div className="info-content">
-                    <h1>Enterprise Insurance Management System</h1>
                     <p>Streamline your insurance operations with our comprehensive platform. Manage policies, claims, and customer relationships all in one place.</p>
                     <div className="hero-image"></div>
                 <div className="stats-row">
-                    <div className="stat-item"><h3>10K+</h3><p>Active Users</p></div>
-                    <div className="stat-item"><h3>99.9%</h3><p>Uptime</p></div>
+                    <div className="stat-item"><h3>39</h3><p>Active Users</p></div>
+                    <div className="stat-item"><h3>6</h3><p>Active Policies</p></div>
                     <div className="stat-item"><h3>24/7</h3><p>Support</p></div>
                 </div>
                 </div>

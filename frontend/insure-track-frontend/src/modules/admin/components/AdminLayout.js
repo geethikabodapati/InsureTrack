@@ -12,7 +12,7 @@ import {
 
 // Admin Sidebar Items
 const ADMIN_NAV = [
-    { path: "", label: "Dashboard", icon: Box, end: true },
+    { path: "admin-dashboard", label: "Dashboard", icon: Box, end: true },
     { path: "admin-products", label: "Products", icon: Box },
     { path: "admin-coverages", label: "Coverages", icon: ShieldCheck },
     { path: "admin-rules", label: "Rating Rules", icon: Calculator },

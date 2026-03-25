@@ -12,6 +12,7 @@ public class ReserveResponseDTO {
 
     private Long reserveId;
     private Long claimId;
+    private Long policyId;
     private Double amount;
     private String status;
     private LocalDate createdDate;

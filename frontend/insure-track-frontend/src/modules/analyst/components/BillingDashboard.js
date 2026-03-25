@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
+ 
 const BillingDashboard = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-
+ 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
@@ -26,34 +26,34 @@ const BillingDashboard = () => {
     };
     fetchInvoices();
   }, []);
-
+ 
   const totalBilled  = invoices.reduce((s, i) => s + i.amount, 0);
   const collected    = invoices.filter(i => i.status === 'PAID').reduce((s, i) => s + i.amount, 0);
   const outstanding  = totalBilled - collected;
   const overdue      = invoices.filter(i => i.status === 'OVERDUE').length;
-
+ 
   const filtered = filter === 'ALL' ? invoices : invoices.filter(i => i.status === filter);
-
+ 
   const statusBadgeClass = (status) => {
     if (status === 'PAID')      return 'it-badge it-badge-success';
     if (status === 'OVERDUE')   return 'it-badge it-badge-danger';
     if (status === 'CANCELLED') return 'it-badge it-badge-neutral';
     return 'it-badge it-badge-warning';
   };
-
+ 
   return (
     <div className="it-page">
       <div className="it-page-header">
         <h1 className="it-page-title">Billing</h1>
         <p className="it-page-subtitle">Monitor and manage all billing invoices</p>
       </div>
-
+ 
       {/* KPI Stats */}
       <div className="it-stat-grid">
         {[
-          { label: 'Total Billed',  value: `$${totalBilled.toLocaleString()}`,   color: '#EFF6FF', ic: '#1E3A8A' },
-          { label: 'Collected',     value: `$${collected.toLocaleString()}`,      color: '#F0FDF4', ic: '#16A34A' },
-          { label: 'Outstanding',   value: `$${outstanding.toLocaleString()}`,    color: '#FEF3C7', ic: '#B45309' },
+          { label: 'Total Billed',  value: `₹${totalBilled.toLocaleString()}`,   color: '#EFF6FF', ic: '#1E3A8A' },
+          { label: 'Collected',     value: `₹${collected.toLocaleString()}`,      color: '#F0FDF4', ic: '#16A34A' },
+          { label: 'Outstanding',   value: `₹${outstanding.toLocaleString()}`,    color: '#FEF3C7', ic: '#B45309' },
           { label: 'Overdue Items', value: overdue,                               color: '#FEE2E2', ic: '#DC2626' },
         ].map(s => (
           <div key={s.label} className="it-stat-card">
@@ -67,7 +67,7 @@ const BillingDashboard = () => {
           </div>
         ))}
       </div>
-
+ 
       {/* Filter Tabs + Print */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
         {['ALL','PAID','OPEN','OVERDUE','CANCELLED'].map(f => (
@@ -83,7 +83,7 @@ const BillingDashboard = () => {
           🖨 Print
         </button>
       </div>
-
+ 
       {/* Table */}
       <div className="it-table-wrapper">
         {loading ? (
@@ -104,7 +104,7 @@ const BillingDashboard = () => {
                   <td>#{inv.invoiceId}</td>
                   <td>{inv.policyId}</td>
                   <td>{inv.customerName}</td>
-                  <td>${inv.amount?.toLocaleString()}</td>
+                  <td>₹{inv.amount?.toLocaleString()}</td>
                   <td>{inv.issueDate}</td>
                   <td>{inv.dueDate}</td>
                   <td><span className={statusBadgeClass(inv.status)}>{inv.status}</span></td>
@@ -119,7 +119,7 @@ const BillingDashboard = () => {
           </table>
         )}
       </div>
-
+ 
       {/* Details Modal */}
       {selectedInvoice && (
         <div className="it-modal-overlay" onClick={() => setSelectedInvoice(null)}>
@@ -147,5 +147,5 @@ const BillingDashboard = () => {
     </div>
   );
 };
-
+ 
 export default BillingDashboard;

@@ -17,5 +17,7 @@ public class QuoteResponseDTO {
     private Double premium;
     private String status;
     private LocalDateTime createdDate;
+    private String customerName;
+    private Long insuredObjectId;
 }
 

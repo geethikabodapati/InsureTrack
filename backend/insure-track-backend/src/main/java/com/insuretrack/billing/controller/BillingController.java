@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/insuretrack/api/analyst/billing")
+@RequestMapping("/api/analyst/billing")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class    BillingController {
@@ -75,18 +75,19 @@ public class    BillingController {
         return invoiceService.getAllInvoicesWithCustomer();
     }
 
-    //get all payments with customer name
     @GetMapping("/payments/all")
     public List<PaymentResponseDTO> getAllPaymentsWithCustomer() {
-        return paymentService.getAllPaymentsWithCustomer();
+        return paymentService.getAllPaymentsWithCustomer(); // Check if service returns List
     }
 
-    //get all payments with customer name
+    // 2. Refunds list kosam idhi check chey
     @GetMapping("/refunds/all")
     public List<RefundResponseDTO> getAllRefundsWithCustomer() {
         return refundService.getAllRefundsWithCustomer();
     }
-
-
-
+    // In BillingController.java
+    @PutMapping("/refunds/{id}/process")
+    public RefundResponseDTO processRefund(@PathVariable Long id) {
+        return refundService.completeRefund(id);
+    }
 }

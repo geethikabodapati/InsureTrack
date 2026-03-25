@@ -14,19 +14,22 @@ const AgentDashboard = () => {
             {/* 1. Introductory Header */}
             <div className="page-intro">
                 <h1>Dashboard</h1>
-                <p>Welcome back, John. Here's your insurance portfolio overview.</p>
+                <p>Welcome back, Here's your insurance portfolio overview.</p>
             </div>
 
             {/* 2. KPI Cards Row */}
-            {/* <DashboardStats /> */}
+            <DashboardStats />
 
             {/* 3. Quote Management Table (Main dashboard view as requested) */}
-            {/* <QuoteManagement />
-
+            <QuoteManagement />
+            <br/>
             < PolicyManagement />
+            <br/>
             < EndorsementManagement />
-            <RenewalManagement />
-            <CancellationManagement /> */}
+            <br/>
+
+            <RenewalManagement /><br/>
+            <CancellationManagement />
         </div>
     );
 };

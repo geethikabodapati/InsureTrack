@@ -2,13 +2,103 @@
    InsureTrack Admin Module — Table & Component Styles
    Unified with the design system tokens (see design-system.css)
    ============================================================ */
-
+ 
 /* --- Page Wrapper --- */
+/* Modal Overlay */
+/* Add this to AdminTables.css */
+.success-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+}
+ 
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+.adm-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+ 
+.adm-modal-content {
+    background: rgb(255, 255, 255);
+    padding: 30px;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 20px 25px -5px rgba(244, 243, 243, 0.1);
+}
+ 
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+ 
+.modal-header h2 { font-size: 1.5rem; color: #1e293b; margin: 0; }
+.modal-header p { font-size: 0.875rem; color: #64748b; margin: 4px 0 0 0; }
+ 
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+ 
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; font-weight: 600; color: #475569; }
+ 
+.form-group input, .form-group select {
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+}
+ 
+.modal-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+ 
+.submit-btn {
+    background: #3b82f6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+ 
+.cancel-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 .table-container {
   padding: var(--it-space-8);
   animation: it-fadeIn 0.3s ease;
 }
-
+ 
 /* --- Page Header Row --- */
 .table-header-section {
   display: flex;
@@ -18,7 +108,7 @@
   gap: var(--it-space-4);
   flex-wrap: wrap;
 }
-
+ 
 .table-title h1 {
   font-size: var(--it-font-size-3xl);
   font-weight: 800;
@@ -26,13 +116,13 @@
   margin: 0;
   letter-spacing: -0.02em;
 }
-
+ 
 .table-title p {
   color: var(--it-text-secondary);
   margin: var(--it-space-1) 0 0 0;
   font-size: var(--it-font-size-sm);
 }
-
+ 
 /* --- Primary Add Button --- */
 .add-btn {
   display: inline-flex;
@@ -50,13 +140,13 @@
   white-space: nowrap;
   font-family: var(--it-font);
 }
-
+ 
 .add-btn:hover {
   background: var(--it-primary-hover);
   box-shadow: var(--it-shadow-md);
   transform: translateY(-1px);
 }
-
+ 
 /* --- Export / Secondary Button --- */
 .export-btn {
   display: inline-flex;
@@ -73,12 +163,12 @@
   transition: var(--it-transition);
   font-family: var(--it-font);
 }
-
+ 
 .export-btn:hover {
   border-color: var(--it-accent);
   color: var(--it-accent);
 }
-
+ 
 /* --- Table Card --- */
 .table-card {
   background: var(--it-bg-card);
@@ -89,22 +179,22 @@
   animation: it-fadeIn 0.3s ease;
   transition: box-shadow 0.2s ease;
 }
-
+ 
 .table-card:hover {
   box-shadow: var(--it-shadow-md);
 }
-
+ 
 /* --- Search Bar Container --- */
 .search-bar-container {
   padding: var(--it-space-4) var(--it-space-5);
   border-bottom: 1px solid var(--it-border);
 }
-
+ 
 .search-wrapper {
   position: relative;
   max-width: 380px;
 }
-
+ 
 .search-icon {
   position: absolute;
   left: 12px;
@@ -113,7 +203,7 @@
   color: var(--it-text-muted);
   pointer-events: none;
 }
-
+ 
 .search-input-field {
   width: 100%;
   padding: 9px 14px 9px 38px;
@@ -126,25 +216,25 @@
   transition: var(--it-transition);
   font-family: var(--it-font);
 }
-
+ 
 .search-input-field:focus {
   border-color: var(--it-accent);
   background: var(--it-bg-card);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
-
+ 
 /* --- Data Table --- */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
-
+ 
 .data-table thead {
   background: var(--it-bg);
   border-bottom: 1.5px solid var(--it-border);
 }
-
+ 
 .data-table th {
   padding: 12px 20px;
   font-size: var(--it-font-size-xs);
@@ -153,30 +243,30 @@
   letter-spacing: 0.05em;
   color: var(--it-text-secondary);
 }
-
+ 
 .data-table td {
   padding: 14px 20px;
   font-size: var(--it-font-size-sm);
   color: var(--it-text-primary);
   border-bottom: 1px solid var(--it-border);
 }
-
+ 
 .data-table tbody tr:last-child td {
   border-bottom: none;
 }
-
+ 
 .data-table tbody tr:hover {
   background: var(--it-bg);
 }
-
+ 
 .data-table tbody tr:nth-child(even) {
   background: rgba(249, 250, 251, 0.5);
 }
-
+ 
 .data-table tbody tr:nth-child(even):hover {
   background: var(--it-bg);
 }
-
+ 
 /* --- Status Badges --- */
 .status-badge {
   display: inline-flex;
@@ -188,23 +278,23 @@
   text-transform: capitalize;
   white-space: nowrap;
 }
-
+ 
 .status-active {
   background: var(--it-success-bg);
   color: var(--it-success);
 }
-
+ 
 .status-inactive {
   background: var(--it-danger-bg);
   color: var(--it-danger);
 }
-
+ 
 /* --- Audit Log Action Badges --- */
 .badge-create  { background: var(--it-success-bg);  color: var(--it-success); border: 1px solid #BBF7D0; }
 .badge-update  { background: var(--it-info-bg);     color: var(--it-info);    border: 1px solid #BAE6FD; }
 .badge-delete  { background: var(--it-danger-bg);   color: var(--it-danger);  border: 1px solid #FECACA; }
 .badge-default { background: #F1F5F9;                color: #475569; }
-
+ 
 /* --- Action Button --- */
 .action-btn {
   background: none;
@@ -218,12 +308,12 @@
   align-items: center;
   justify-content: center;
 }
-
+ 
 .action-btn:hover {
   background: var(--it-bg);
   color: var(--it-primary);
 }
-
+ 
 /* --- Action Dropdown --- */
 .action-dropdown {
   position: absolute;
@@ -240,7 +330,7 @@
   padding: var(--it-space-1);
   animation: it-fadeIn 0.15s ease;
 }
-
+ 
 .action-dropdown button {
   display: flex;
   align-items: center;
@@ -257,12 +347,12 @@
   transition: var(--it-transition);
   font-family: var(--it-font);
 }
-
+ 
 .action-dropdown button:hover {
   background: var(--it-bg);
   color: var(--it-primary);
 }
-
+ 
 /* --- Modal Overlay --- */
 .modal-overlay {
   position: fixed;
@@ -275,7 +365,7 @@
   z-index: 1000;
   animation: it-fadeIn 0.15s ease;
 }
-
+ 
 /* --- Modal Content --- */
 .modal-content {
   background: var(--it-bg-card);
@@ -287,33 +377,33 @@
   animation: it-fadeIn 0.2s ease;
   position: relative;
 }
-
+ 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--it-space-6);
 }
-
+ 
 .modal-header h2 {
   font-size: var(--it-font-size-xl);
   font-weight: 700;
   color: var(--it-text-primary);
   margin: 0;
 }
-
+ 
 .modal-subtext {
   color: var(--it-text-secondary);
   font-size: var(--it-font-size-sm);
   margin-top: var(--it-space-1);
   margin-bottom: var(--it-space-5);
 }
-
+ 
 /* --- Form Groups (in Modals) --- */
 .form-group {
   margin-bottom: var(--it-space-4);
 }
-
+ 
 .form-group label {
   display: block;
   font-size: var(--it-font-size-sm);
@@ -321,7 +411,7 @@
   color: var(--it-text-primary);
   margin-bottom: var(--it-space-2);
 }
-
+ 
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -337,14 +427,14 @@
   font-family: var(--it-font);
   box-sizing: border-box;
 }
-
+ 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--it-accent);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
-
+ 
 /* --- Modal Footer --- */
 .modal-footer {
   display: flex;
@@ -354,7 +444,7 @@
   padding-top: var(--it-space-5);
   border-top: 1px solid var(--it-border);
 }
-
+ 
 .btn-cancel {
   padding: 10px 18px;
   background: var(--it-bg);
@@ -367,12 +457,12 @@
   transition: var(--it-transition);
   font-family: var(--it-font);
 }
-
+ 
 .btn-cancel:hover {
   border-color: var(--it-accent);
   color: var(--it-accent);
 }
-
+ 
 .btn-confirm {
   padding: 10px 18px;
   background: var(--it-primary);
@@ -385,13 +475,13 @@
   transition: var(--it-transition);
   font-family: var(--it-font);
 }
-
+ 
 .btn-confirm:hover {
   background: var(--it-primary-hover);
   box-shadow: var(--it-shadow-md);
   transform: translateY(-1px);
 }
-
+ 
 /* --- Pagination --- */
 .page-nav-btn,
 .page-num-btn {
@@ -405,50 +495,50 @@
   transition: var(--it-transition);
   font-family: var(--it-font);
 }
-
+ 
 .page-nav-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-
+ 
 .page-num-btn.active {
   background: var(--it-primary);
   border-color: var(--it-primary);
   color: white;
   font-weight: 700;
 }
-
+ 
 .page-num-btn:hover:not(.active),
 .page-nav-btn:not(:disabled):hover {
   border-color: var(--it-accent);
   color: var(--it-accent);
 }
-
+ 
 /* --- Dark mode overrides --- */
 body.dark .table-card,
 body.dark .modal-content {
   background: var(--it-bg-card);
   border-color: var(--it-border);
 }
-
+ 
 body.dark .data-table thead {
   background: var(--it-bg);
 }
-
+ 
 body.dark .data-table tbody tr:nth-child(even) {
   background: rgba(30, 41, 59, 0.3);
 }
-
+ 
 body.dark .data-table tbody tr:hover {
   background: var(--it-bg);
 }
-
+ 
 body.dark .search-input-field {
   background: var(--it-bg);
   border-color: var(--it-border);
   color: var(--it-text-primary);
 }
-
+ 
 body.dark .form-group input,
 body.dark .form-group select,
 body.dark .form-group textarea {
@@ -456,8 +546,15 @@ body.dark .form-group textarea {
   border-color: var(--it-border);
   color: var(--it-text-primary);
 }
-
+ 
 body.dark .action-dropdown {
   background: var(--it-bg-card);
   border-color: var(--it-border);
 }
+/* Unique Role Colors */
+.role-admin { background-color: #fee2e2; color: #dc2626; border: 1px solid #fecaca; } /* Red */
+.role-underwriter { background-color: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; } /* Purple */
+.role-adjuster { background-color: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; } /* Orange */
+.role-analyst { background-color: #ecfeff; color: #0891b2; border: 1px solid #cffafe; } /* Cyan */
+.role-agent { background-color: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; } /* Green */
+.role-default { background-color: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; } /* Gray */

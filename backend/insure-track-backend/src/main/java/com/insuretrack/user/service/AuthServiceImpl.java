@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -136,6 +137,10 @@ public class AuthServiceImpl implements AuthService {
                 .user(user)
                 .metadata("Password updated via reset link")
                 .build());
+    }
+    @Override
+    public List<AuditLog> getAllAuditLogs() {
+        return auditLogRepository.findAll();
     }
     private UserResponseDTO mapToResponse(User user) {
         return UserResponseDTO.builder()

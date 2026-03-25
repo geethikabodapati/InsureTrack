@@ -43,7 +43,7 @@ const Login = () => {
 
         try {
             const response = await login({ email, password });
-            localStorage.setItem('token', response.data.token);
+            //localStorage.setItem('token', response.data.token);
             localStorage.setItem('role', response.data.role);
             localStorage.setItem('user', JSON.stringify(response.data));
             window.dispatchEvent(new Event("storage"));
@@ -54,7 +54,7 @@ const Login = () => {
             else if (role === "AGENT") navigate('/agent-dashboard');
             else if (role === "ANALYST") navigate('/analyst-dashboard');
             else if (role === "ADJUSTER") navigate('/adjuster-dashboard');
-            else navigate('/dashboard');
+            else navigate('/');
         } catch (error) {
             setErrors({ api: error.response?.data?.message || "Invalid Credentials" });
         }
@@ -70,8 +70,8 @@ const Login = () => {
                     <div className="hero-image"></div>
                 </div>
                 <div className="stats-row">
-                    <div className="stat-item"><h3>10K+</h3><p>Active Users</p></div>
-                    <div className="stat-item"><h3>99.9%</h3><p>Uptime</p></div>
+                    <div className="stat-item"><h3>36</h3><p>Active Users</p></div>
+                    <div className="stat-item"><h3>6</h3><p>Active Policies</p></div>
                     <div className="stat-item"><h3>24/7</h3><p>Support</p></div>
                 </div>
             </div>

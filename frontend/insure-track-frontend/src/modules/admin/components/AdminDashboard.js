@@ -1,100 +1,158 @@
-import React from 'react';
-import { DollarSign, Shield, Users, Activity, Car, Truck, Bus } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { DollarSign, Shield, Car, Box, Clock, ChevronRight, Activity, AlertTriangle, TrendingUp } from 'lucide-react';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, LineChart, Line 
+    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, 
+    Cell, PieChart, Pie 
 } from 'recharts';
+import { getAdminDashboardStats, getAllProducts } from '../../../core/services/api.js'; 
 import '../styles/Dashboard.css';
 
 const AdminDashboard = () => {
-    // Mock Data for Vehicle Distribution
-    const vehicleData = [
-        { name: 'CAR', value: 400, color: '#3b82f6' },
-        { name: 'BIKE', value: 300, color: '#10b981' },
-        { name: 'TRUCK', value: 200, color: '#f59e0b' },
-        { name: 'BUS', value: 100, color: '#ef4444' },
-        { name: 'VAN', value: 80, color: '#8b5cf6' },
-        { name: 'TRACTOR', value: 50, color: '#64748b' },
-        { name: 'AUTO', value: 120, color: '#ec4899' },
-    ];
+    const [data, setData] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Mock Data for Premium vs Claims Trend
-    const trendData = [
-        { month: 'Jan', premium: 45000, claims: 21000 },
-        { month: 'Feb', premium: 52000, claims: 24000 },
-        { month: 'Mar', premium: 48000, claims: 28000 },
-        { month: 'Apr', premium: 61000, claims: 32000 },
-        { month: 'May', premium: 55000, claims: 29000 },
-        { month: 'Jun', premium: 67000, claims: 35000 },
-    ];
+    useEffect(() => {
+        Promise.all([getAdminDashboardStats(), getAllProducts()])
+            .then(([statsRes, productsRes]) => {
+                setData(statsRes.data);
+                // Filter for ACTIVE only as requested
+                setProducts(productsRes.data.filter(p => p.status === 'ACTIVE').slice(0, 6)); 
+            })
+            .catch(err => console.error("Sync Error:", err))
+            .finally(() => setLoading(false));
+    }, []);
 
-    const stats = [
-        { label: "Gross Premium", value: "$2,456,890", icon: <DollarSign size={24} color="#2563eb"/> },
-        { label: "Active Policies", value: "8,245", icon: <Shield size={24} color="#16a34a"/> },
-        { label: "Insured Vehicles", value: "1,257", icon: <Car size={24} color="#7c3aed"/> },
-        { label: "Claims Ratio", value: "42%", icon: <Activity size={24} color="#ea580c"/> },
-    ];
+    if (loading) return <div className="loading-overlay">Synchronizing Risk Engine...</div>;
+
+    const chartData = data.vehicleDistribution.map(v => ({
+        name: v.type, // Backend renamed 'Vehicle' to 'Car'
+        value: v.count,
+        fill: v.color
+    }));
+
+    // Logic to determine Risk Health Color
+    // Combined Ratio > 100% is technically an underwriting loss
+    const riskValue = parseFloat(data.portfolioRiskScore);
+    const riskStatusColor = riskValue > 100 ? "#ef4444" : "#f59e0b";
 
     return (
-        <div className="dashboard-wrapper">
-            <div style={{ marginBottom: '32px' }}>
-                <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#1e293b', margin: '0 0 8px 0' }}>Admin Overview</h1>
-                <p style={{ color: '#64748b', margin: 0 }}>Monitoring Vehicle Insurance Portfolio Performance</p>
+        <div className="dashboard-root">
+            <header className="dashboard-main-header">
+                <div className="title-group">
+                    <h1>Overview</h1>
+                    <span className="live-tag">● SYSTEM LIVE</span>
+                </div>
+            </header>
+
+            {/* KPI Row: Icons Top-Right, Text Left */}
+            <div className="metrics-grid">
+                <MetricCard 
+                    label="Gross Written Premium" 
+                    val={`₹${data.totalGrossPremium.toLocaleString('en-IN')}`} 
+                    icon={<DollarSign/>} 
+                    clr="#3b82f6"
+                />
+                <MetricCard 
+                    label="Active Policies" 
+                    val={data.activePolicies} 
+                    icon={<Shield/>} 
+                    clr="#10b981"
+                />
+                <MetricCard 
+                    label="Combined Risk Ratio" 
+                    val={data.portfolioRiskScore} 
+                    icon={<AlertTriangle/>} 
+                    clr={riskStatusColor}
+                    subtitle={riskValue > 100 ? "High Exposure" : "Healthy Margin"}
+                />
             </div>
 
-            {/* Top Stats */}
-            <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
-                {stats.map((stat, index) => (
-                    <div key={index} className="stat-card" style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                            <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>{stat.label}</p>
-                            <h3 style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>{stat.value}</h3>
+            <div className="charts-full-row">
+                {/* Chart 1: Distribution */}
+                <div className="viz-card flex-1">
+                    <div className="card-header">
+                        <div className="header-text">
+                            <h4>Risk Segmentation</h4>
+                            <p>Asset Ratio</p>
                         </div>
-                        <div style={{ padding: '12px', borderRadius: '12px', background: '#f1f5f9' }}>{stat.icon}</div>
+                        <TrendingUp size={18} color="#a3aed0" />
                     </div>
-                ))}
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
-                {/* Main Trend Chart */}
-                <div style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                    <h3 style={{ marginBottom: '20px', fontSize: '16px', fontWeight: '600' }}>Premium vs Claims (Last 6 Months)</h3>
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
-                            <LineChart data={trendData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <Tooltip />
-                                <Line type="monotone" dataKey="premium" stroke="#3b82f6" strokeWidth={3} dot={{ r: 6 }} />
-                                <Line type="monotone" dataKey="claims" stroke="#ef4444" strokeWidth={3} dot={{ r: 6 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
+                    <ResponsiveContainer width="100%" height={220}>
+                        <PieChart>
+                            <Pie data={chartData} innerRadius={65} outerRadius={85} dataKey="value" paddingAngle={8}>
+                                {chartData.map((e, i) => <Cell key={i} fill={e.fill} cornerRadius={10} />)}
+                            </Pie>
+                            <Tooltip />
+                        </PieChart>
+                    </ResponsiveContainer>
                 </div>
 
-                {/* Vehicle Distribution Chart */}
-                <div style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                    <h3 style={{ marginBottom: '20px', fontSize: '16px', fontWeight: '600' }}>Portfolio by Vehicle Type</h3>
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
-                            <BarChart data={vehicleData} layout="vertical">
-                                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                                <XAxis type="number" hide />
-                                <YAxis dataKey="name" type="category" width={70} />
-                                <Tooltip cursor={{fill: 'transparent'}} />
-                                <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                                    {vehicleData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
+                {/* Chart 2: Volume */}
+                <div className="viz-card flex-2">
+                    <div className="card-header">
+                        <div className="header-text">
+                            <h4>Inventory Volume</h4>
+                            <p>Product Distribution</p>
+                        </div>
+                        <Activity size={18} color="#a3aed0" />
                     </div>
+                    <ResponsiveContainer width="100%" height={220}>
+                        <BarChart data={chartData}>
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#a3aed0', fontSize: 12}} />
+                            <Tooltip cursor={{fill: '#f4f7fe'}} />
+                            <Bar dataKey="value" radius={[8, 8, 0, 0]} barSize={35}>
+                                {chartData.map((e, i) => <Cell key={i} fill={e.fill} />)}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+
+            {/* Recent Activity Section */}
+            <div className="activity-section">
+                <div className="section-title">
+                    <Clock size={20} />
+                    <h3>Active Products</h3>
+                </div>
+                <div className="horizontal-feed">
+                    {products.map((p, i) => (
+                        <div key={i} className="product-activity-card">
+                            <div className="activity-text">
+                                <p className="p-name">{p.name}</p>
+                                <p className="p-tag">Active</p>
+                            </div>
+                            <div className="icon-group">
+                                <Box size={18} className="box-icon" />
+                                <div className="hover-trigger">
+                                    <ChevronRight className="arrow-icon" />
+                                    <div className="detail-popover">
+                                        <h6>{p.name}</h6>
+                                        <p><strong>Coverages:</strong> {p.coverages?.length || 0}</p>
+                                        <p className="p-desc">{p.description || "Active high-performance product."}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
     );
 };
+
+// Reusable Metric Card with Icon on Top Right
+const MetricCard = ({label, val, icon, clr, subtitle}) => (
+    <div className="m-card">
+        <div className="m-text">
+            <span className="m-label">{label}</span>
+            <span className="m-value">{val}</span>
+            {subtitle && <span className="m-subtitle" style={{color: clr}}>{subtitle}</span>}
+        </div>
+        <div className="m-icon-box" style={{color: clr, backgroundColor: `${clr}12`}}>
+            {icon}
+        </div>
+    </div>
+);
 
 export default AdminDashboard;

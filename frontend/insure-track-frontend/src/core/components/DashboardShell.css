@@ -369,6 +369,7 @@
   background: var(--it-bg);
   scrollbar-width: thin;
   scrollbar-color: var(--it-border) transparent;
+  padding: 32px;
 }
 
 /* --- Dark Mode Overrides for Shell --- */
@@ -469,6 +470,7 @@ body.dark .it-header {
 }
 
 .it-dropdown-item {
+  color: #2563eb !important; 
   display: flex;
   align-items: center;
   gap: var(--it-space-2);
@@ -484,18 +486,21 @@ body.dark .it-header {
   transition: var(--it-transition);
   color: var(--it-text-primary);
 }
-
 .it-dropdown-item:hover {
   background: var(--it-bg);
+    background-color: #e3effb; 
+    color: #1d4ed8 !important;
 }
-
-.it-dropdown-item-danger {
+.it-dropdown-item svg {
+    stroke: currentColor;
+}
+/* .it-dropdown-item-danger {
   color: var(--it-danger);
 }
 
 .it-dropdown-item-danger:hover {
   background: var(--it-danger-bg);
-}
+} */
 
 /* --- Dark Mode Shell Overrides --- */
 body.dark .it-shell {
@@ -523,3 +528,9 @@ body.dark .it-user-dropdown {
   }
 }
 
+/* If you add a 'disabled' property to your nav items later */
+.it-nav-link.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(1);
+}

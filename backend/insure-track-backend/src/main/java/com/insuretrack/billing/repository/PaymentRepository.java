@@ -5,6 +5,7 @@ import com.insuretrack.billing.dto.PaymentResponseDTO;
 import com.insuretrack.billing.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -21,5 +22,10 @@ public interface PaymentRepository extends JpaRepository<Payment,Long> {
             "JOIN q.customer c")
     List<PaymentResponseDTO> findAllPaymentsWithCustomer();
 
+    // Finds the latest payment by joining through the invoice to the policy
+    @Query("SELECT p FROM Payment p WHERE p.invoice.policy.policyId = :policyId ORDER BY p.paymentId DESC")
+    List<Payment> findPaymentsByPolicyId(@Param("policyId") Long policyId);
 
+    List<Payment> findByInvoice_Policy_PolicyId(Long policyId);
 }
+

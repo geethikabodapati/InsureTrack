@@ -100,8 +100,12 @@
 //}
 package com.insuretrack.underwriting.service;
 
+import com.insuretrack.billing.dto.InvoiceRequestDTO;
+import com.insuretrack.billing.service.InvoiceService;
+import com.insuretrack.common.enums.NotificationCategory;
 import com.insuretrack.common.enums.QuoteStatus;
 import com.insuretrack.common.enums.UnderwritingDecision;
+import com.insuretrack.notification.service.NotificationService;
 import com.insuretrack.policy.service.PolicyService;
 import com.insuretrack.quote.entity.Quote;
 import com.insuretrack.quote.repository.QuoteRepository;
@@ -116,6 +120,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -132,6 +137,8 @@ public class UnderwritingServiceImpl implements UnderwritingService {
     private final UserRepository userRepository;
     private final QuoteRepository quoteRepository;
     private final PolicyService policyService;
+    private final InvoiceService invoiceService;
+    private final NotificationService notificationService;
 
     @Override
     public UnderwritingResponseDTO createCase(Long quoteId) {
@@ -188,22 +195,40 @@ public class UnderwritingServiceImpl implements UnderwritingService {
         Quote quote = uwCase.getQuote();
         if (decision == UnderwritingDecision.APPROVE) {
             quote.setStatus(QuoteStatus.APPROVED);
-            policyService.issuePolicy(quote.getQuoteId());
-        } else {
+
+            // 2. Issue the policy first to get a policyId
+            var policyResponse = policyService.issuePolicy(quote.getQuoteId());
+
+            // 3. Create the initial Invoice for the new policy
+            InvoiceRequestDTO invoiceRequest = InvoiceRequestDTO.builder()
+                    .amount(quote.getPremium()) // Assuming Quote has the amount
+                    .dueDate(LocalDate.now().plusDays(30)) // Setting a default due date
+                    .build();
+
+
+            invoiceService.createInvoice(policyResponse.getPolicyId(), invoiceRequest);
+        }
+        else
+        {
             // Mapping DECLINE to REJECTED based on your QuoteStatus enum
             quote.setStatus(QuoteStatus.REJECTED);
         }
+        notificationService.createNotification(
+                uwCase.getQuote().getCustomer().getCustomerId(),
+                "Your Insurance Case #" + caseId + " has been " + decisionDTO.getDecision(),
+                NotificationCategory.UNDERWRITING
+        );
 
         // 3. SAVE changes
         return mapToDTO(underwritingRepository.save(uwCase));
     }
-
     private UnderwritingResponseDTO mapToDTO(UnderwritingCase uwCase) {
         return UnderwritingResponseDTO.builder()
                 .uwCaseId(uwCase.getUwCaseId())
                 .quoteId(uwCase.getQuote().getQuoteId())
                 .decision(uwCase.getDecision().toString())
                 // GETTING THE TYPE: Access the Product name via the Quote
+                .riskScore(uwCase.getQuote().getInsuredObject().getRiskScore())
                 .policyType(uwCase.getQuote().getProduct().getName())
                 .customerName(uwCase.getQuote().getCustomer().getName())
                 .coverageAmount(uwCase.getQuote().getPremium())

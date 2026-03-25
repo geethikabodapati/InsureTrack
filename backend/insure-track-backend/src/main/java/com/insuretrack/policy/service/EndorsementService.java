@@ -9,4 +9,5 @@ public interface EndorsementService {
     EndorsementResponseDTO create(EndorsementRequestDTO requestDTO);
     List<EndorsementResponseDTO> getAllEndorsements();
     EndorsementResponseDTO approveEndorsement(Long endorsementId);
+
 }

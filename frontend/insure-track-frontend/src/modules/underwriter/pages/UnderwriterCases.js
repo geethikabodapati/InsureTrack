@@ -14,6 +14,7 @@ const UnderwritingCases = () => {
     setLoading(true);
     try {
       const response = await getAllCases();
+      console.log(response);
       const actualData = response.data.content || response.data;
       setCases(Array.isArray(actualData) ? actualData : []);
     } catch (error) {
@@ -59,10 +60,12 @@ const UnderwritingCases = () => {
         <thead>
           <tr>
             <th>Case ID</th>
-            <th>Quote ID</th>
-            <th>Risk Score</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>Name</th>
+            <th>Risk Assessment</th>
+            <th>Coverage Amount</th>
+            <th>Product Type</th>
+            <th style={{ textAlign:'left',paddingLeft:'27px'}}>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -70,24 +73,35 @@ const UnderwritingCases = () => {
             const isPending = item.decision?.toUpperCase() === 'PENDING';
             return (
               <tr key={item.uwCaseId}>
-                <td># {item.uwCaseId}</td>
-                <td>{item.quoteId}</td>
+                <td>{item.uwCaseId}</td>
+                <td>{item.customerName}</td>
                 <td>
                   <span className={`badge-score ${item.riskScore >= 1 ? 'high' : 'low'}`}>
-                    {item.riskScore || 0}
+                    {item.riskScore  >= 1 ? 'High' : 'Low' || 0}
                   </span>
                 </td>
                 <td>
-                  <span className={`status-pill ${item.decision?.toLowerCase()}`}>
-                    {item.decision}
+                  <span>
+                    {item.coverageAmount || 0}
                   </span>
                 </td>
+                <td>
+                  <span>
+                    {item.policyType || 'NA'}
+                  </span>
+                </td>
+                <td style={{ textAlign: 'left', paddingLeft: '15px' }}>
+  <span 
+    className={`status-pill ${item.decision?.toLowerCase()}`}>
+    {item.decision}
+  </span>
+</td>
                 <td>
                   <button 
                     className={`view-btn ${!isPending ? 'read-only' : ''}`}
-                    onClick={() => navigate(`/underwriter-dashboard/risk-assessment/${item.uwCaseId}`)}
+                    onClick={() => navigate(`/underwriter-dashboard/lookup-case/${item.uwCaseId}`)}
                   >
-                    {isPending ? <><ClipboardCheck size={16} /> Decide</> : <><Eye size={16} /> Review</>}
+                    {isPending ? <><ClipboardCheck size={16} /> </> : <><Eye size={16} /></>}
                   </button>
                 </td>
               </tr>

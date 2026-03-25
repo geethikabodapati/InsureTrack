@@ -12,6 +12,7 @@ public class ClaimResponseDTO {
 
     private Long claimId;
     private Long policyId;
+    private String    policyNumber;
     private LocalDate incidentDate;
     private LocalDate reportedDate;
     private String claimType;

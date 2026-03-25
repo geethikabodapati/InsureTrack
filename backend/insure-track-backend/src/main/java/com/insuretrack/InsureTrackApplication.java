@@ -9,5 +9,4 @@ public class InsureTrackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InsureTrackApplication.class, args);
 	}
-
 }

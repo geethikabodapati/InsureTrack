@@ -9,4 +9,6 @@ public interface RefundService {
     RefundResponseDTO initiateRefund(Long paymentId, RefundRequestDTO dto);
 
     List<RefundResponseDTO> getAllRefundsWithCustomer();
+
+    RefundResponseDTO completeRefund(Long refundId);
 }

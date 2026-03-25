@@ -11,26 +11,18 @@ const AdminSettings = () => {
         confirmPassword: ''
     });
 
-    // Default to 'Dark' as you want everything black
-    const [theme, setTheme] = useState(localStorage.getItem('appTheme') || 'Dark');
-
+    // --- FETCH USER ON LOAD ---
     useEffect(() => {
-        const stored = localStorage.getItem("user");
-        if (stored) {
-            const parsed = JSON.parse(stored);
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            // Ensure we set the name and email from the logged-in session
             setUserData({
-                name: parsed.name || parsed.username || 'Admin1',
-                email: parsed.email || 'admin213@gmail.com'
+                name: parsedUser.name || '',
+                email: parsedUser.email || ''
             });
         }
-        // Apply theme to the root element immediately
-        document.documentElement.setAttribute('data-theme', theme.toLowerCase());
-    }, [theme]);
-
-    const handleThemeChange = (newTheme) => {
-        setTheme(newTheme);
-        localStorage.setItem('appTheme', newTheme);
-    };
+    }, []);
 
     const handlePasswordUpdate = async (e) => {
         e.preventDefault();
@@ -39,7 +31,7 @@ const AdminSettings = () => {
             return;
         }
         try {
-            // Replace with your backend URL
+            // Updated to use the state's email
             await axios.post('http://localhost:8080/api/users/change-password', {
                 email: userData.email,
                 oldPassword: passwordForm.currentPassword,
@@ -52,11 +44,27 @@ const AdminSettings = () => {
         }
     };
 
-    const handleProfileUpdate = () => {
-        const updatedUser = { ...JSON.parse(localStorage.getItem("user")), name: userData.name };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        alert("Name updated!");
-        window.location.reload(); 
+    const handleProfileUpdate = async () => {
+        try {
+            // 1. Update the database (adjust URL/method based on your API)
+            // Assuming an endpoint like /api/users/update-profile
+            await axios.put('http://localhost:8080/api/users/update-name', {
+                email: userData.email,
+                name: userData.name
+            });
+
+            // 2. Update Local Storage so the UI reflects the change globally
+            const storedUser = JSON.parse(localStorage.getItem("user"));
+            const updatedUser = { ...storedUser, name: userData.name };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+
+            alert("Profile updated in database!");
+            
+            // Optional: Dispatch a storage event if other components need to know
+            window.location.reload(); 
+        } catch (error) {
+            alert(error.response?.data?.message || "Error updating profile in database.");
+        }
     };
 
     return (
@@ -82,25 +90,26 @@ const AdminSettings = () => {
                         <h3 style={{ margin: 0, color: 'var(--text-main)' }}>Profile Information</h3>
                     </div>
                     <div className="form-group">
-                        <label style={{ color: 'var(--text-muted)' }}>Full Name</label>
+                        <label style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>Full Name</label>
                         <input 
                             type="text" 
                             className="search-input-field" 
-                            style={{ width: '100%', marginBottom: '15px' }} 
+                            style={{ width: '100%', marginBottom: '15px', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }} 
                             value={userData.name}
                             onChange={(e) => setUserData({...userData, name: e.target.value})}
                         />
-                        <label style={{ color: 'var(--text-muted)' }}>Email Address (Read-Only)</label>
+                        <label style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>Email Address (Read-Only)</label>
                         <input 
                             type="email" 
                             className="search-input-field" 
-                            style={{ width: '100%', opacity: 0.6, cursor: 'not-allowed' }} 
+                            style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', color: '#64748b', cursor: 'not-allowed' }} 
                             value={userData.email}
+                            disabled // Strictly disabled
                             readOnly 
                         />
                     </div>
                     <button className="add-btn" onClick={handleProfileUpdate} style={{ marginTop: '20px', width: '100%', justifyContent: 'center' }}>
-                        Save Name Changes
+                        Update Database Profile
                     </button>
                 </div>
 
@@ -112,57 +121,30 @@ const AdminSettings = () => {
                     </div>
                     <form onSubmit={handlePasswordUpdate}>
                         <div className="form-group">
-                            <label style={{ color: 'var(--text-muted)' }}>Current Password</label>
+                            <label style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>Current Password</label>
                             <input 
-                                type="password" required className="search-input-field" style={{ width: '100%', marginBottom: '10px' }} 
+                                type="password" required className="search-input-field" style={{ width: '100%', marginBottom: '10px', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }} 
                                 value={passwordForm.currentPassword}
                                 onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
                             />
-                            <label style={{ color: 'var(--text-muted)' }}>New Password</label>
+                            <label style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>New Password</label>
                             <input 
-                                type="password" required className="search-input-field" style={{ width: '100%', marginBottom: '10px' }} 
+                                type="password" required className="search-input-field" style={{ width: '100%', marginBottom: '10px', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }} 
                                 value={passwordForm.newPassword}
                                 onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
                             />
-                            <label style={{ color: 'var(--text-muted)' }}>Confirm New Password</label>
+                            <label style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>Confirm New Password</label>
                             <input 
-                                type="password" required className="search-input-field" style={{ width: '100%' }} 
+                                type="password" required className="search-input-field" style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #e2e8f0' }} 
                                 value={passwordForm.confirmPassword}
                                 onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
                             />
                         </div>
                         <button type="submit" className="add-btn" style={{ marginTop: '20px', width: '100%', justifyContent: 'center', backgroundColor: '#ef4444' }}>
-                            Update Database
+                            Update Database Password
                         </button>
                     </form>
                 </div>
-
-                {/* INTERFACE MODE */}
-                <div className="table-card" style={{ padding: '24px', backgroundColor: 'var(--card-bg)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                        <Monitor size={22} color="#8b5cf6" />
-                        <h3 style={{ margin: 0, color: 'var(--text-main)' }}>Interface Mode</h3>
-                    </div>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <button 
-                            onClick={() => handleThemeChange('Light')}
-                            style={{ 
-                                flex: 1, padding: '12px', borderRadius: '8px', cursor: 'pointer',
-                                border: theme === 'Light' ? '2px solid #3b82f6' : '1px solid #444',
-                                background: theme === 'Light' ? '#eff6ff' : '#111',
-                                color: theme === 'Light' ? '#000' : '#fff'
-                            }}>☀️ Light</button>
-                        <button 
-                            onClick={() => handleThemeChange('Dark')}
-                            style={{ 
-                                flex: 1, padding: '12px', borderRadius: '8px', cursor: 'pointer',
-                                border: theme === 'Dark' ? '2px solid #3b82f6' : '1px solid #444',
-                                background: theme === 'Dark' ? '#1e293b' : '#111',
-                                color: '#fff'
-                            }}>🌙 Dark</button>
-                    </div>
-                </div>
-
             </div>
         </div>
     );

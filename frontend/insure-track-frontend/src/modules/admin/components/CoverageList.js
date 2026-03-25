@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCoverages } from '../../../core/services/api'; 
-import { MoreVertical, Search, ChevronLeft, ChevronRight, Inbox } from 'lucide-react';
+import { getAllCoverages, deleteCoverage } from '../../../core/services/api'; 
+import { Trash2, Search, ChevronLeft, ChevronRight, Inbox } from 'lucide-react';
 import '../styles/AdminTables.css'; 
 
 const CoverageList = () => {
     const [coverages, setCoverages] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
-
-    // --- PAGINATION STATE ---
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10); 
 
@@ -22,12 +19,23 @@ const CoverageList = () => {
                 setLoading(false);
             })
             .catch(() => {
-                setError("Failed to connect to backend.");
                 setLoading(false);
             });
     };
 
     useEffect(() => { fetchCoverages(); }, []);
+
+    const handleDelete = async (id) => {
+        if (window.confirm("Are you sure you want to delete this coverage? This may affect product status.")) {
+            try {
+                await deleteCoverage(id);
+                // Update local state to remove the item immediately
+                setCoverages(prev => prev.filter(c => c.coverageId !== id));
+            } catch (err) {
+                alert("Failed to delete coverage.");
+            }
+        }
+    };
 
     const formatCurrency = (amount) => {
         if (!amount && amount !== 0) return 'N/A';
@@ -36,18 +44,17 @@ const CoverageList = () => {
         }).format(amount);
     };
 
-    // 1. Filter logic
     const filteredCoverages = coverages.filter(cov => 
-        cov.coverageType.toLowerCase().includes(searchTerm.toLowerCase())
+        cov.coverageType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cov.productName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // 2. Pagination Calculation
+    // Pagination Calculation
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = filteredCoverages.slice(indexOfFirstRow, indexOfLastRow);
     const totalPages = Math.ceil(filteredCoverages.length / rowsPerPage);
 
-    // 3. Logic to show only 5 page numbers
     const getPaginationGroup = () => {
         let start = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
         if (totalPages <= 5) start = 1;
@@ -68,25 +75,20 @@ const CoverageList = () => {
             </div>
 
             <div className="table-card">
-                {/* --- HEADER CONTROLS --- */}
                 <div className="table-controls-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px' }}>
                     <div className="search-wrapper" style={{ width: '300px', position: 'relative' }}>
                         <Search className="search-icon" size={18} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                         <input 
-                            type="text" placeholder="Search coverage types..." 
+                            type="text" placeholder="Search type or product..." 
                             className="search-input-field"
                             style={{ paddingLeft: '35px', width: '100%', height: '38px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
                             value={searchTerm}
                             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                         />
                     </div>
-                    <div className="page-length" style={{ color: '#64748b', fontSize: '14px' }}>
+                    <div style={{ color: '#64748b', fontSize: '14px' }}>
                         Show 
-                        <select 
-                            value={rowsPerPage} 
-                            onChange={(e) => {setRowsPerPage(Number(e.target.value)); setCurrentPage(1);}}
-                            style={{ margin: '0 8px', padding: '6px 10px', borderRadius: '6px', border: '1px solid #e2e8f0' }}
-                        >
+                        <select value={rowsPerPage} onChange={(e) => {setRowsPerPage(Number(e.target.value)); setCurrentPage(1);}} style={{ margin: '0 8px', padding: '6px' }}>
                             <option value={5}>5</option>
                             <option value={10}>10</option>
                             <option value={25}>25</option>
@@ -95,35 +97,43 @@ const CoverageList = () => {
                     </div>
                 </div>
 
-                {/* --- DATA TABLE --- */}
                 <table className="data-table">
                     <thead>
                         <tr>
-                            <th>Coverage ID</th>
                             <th>Type</th>
                             <th>Limit</th>
                             <th>Deductible</th>
-                            <th>Product ID</th>
-                            <th></th>
+                            <th>Product</th> {/* Column changed */}
+                            <th style={{ textAlign: 'right' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {!loading && currentRows.map((cov) => (
                             <tr key={cov.coverageId}>
-                                <td style={{ fontWeight: '600' }}>COV-00{cov.coverageId}</td>
                                 <td>{cov.coverageType}</td>
                                 <td style={{ fontWeight: '600' }}>{formatCurrency(cov.coverageLimit)}</td>
                                 <td>{formatCurrency(cov.deductible)}</td>
-                                <td><span className="id-badge" style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }}>PRD-{cov.productId}</span></td>
+                                {/* Displays Product Name now */}
+                                <td>
+                                    <span style={{ fontWeight: '500', color: '#1e293b' }}>{cov.productName}</span>
+                                    <br />
+                                    {/* <small style={{ color: '#94a3b8' }}>ID: PRD-{cov.productId}</small> */}
+                                </td>
                                 <td style={{ textAlign: 'right' }}>
-                                    <button className="action-btn" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
-                                        <MoreVertical size={18}/>
+                                    <button 
+                                        onClick={() => handleDelete(cov.coverageId)}
+                                        className="delete-btn" 
+                                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '8px', borderRadius: '6px' }}
+                                        title="Delete Coverage"
+                                    >
+                                        <Trash2 size={18}/>
                                     </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+               
                 
                 {/* --- LOADING STATE --- */}
                 {loading && (

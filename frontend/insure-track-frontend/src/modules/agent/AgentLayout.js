@@ -5,7 +5,6 @@ import {
   LayoutGrid, FileText, Shield, RefreshCw,
   Calendar, XCircle, Users, Clipboard, Bell
 } from 'lucide-react';
-import CreateQuoteModal from './components/CreateQuoteModal';
 import DashboardShell from '../../core/components/DashboardShell';
 
 const NAV = [
@@ -15,9 +14,8 @@ const NAV = [
   { path: 'endorsements', icon: RefreshCw, label: 'Endorsements' },
   { path: 'renewals', icon: Calendar, label: 'Renewals' },
   { path: 'cancellations', icon: XCircle, label: 'Cancellations' },
-  { path: 'customers', icon: Users, label: 'Customers' },
-  { path: 'claims', icon: Clipboard, label: 'Claims' },
-  { path: 'notifications', icon: Bell, label: 'Notifications' },
+  // { path: 'customers', icon: Users, label: 'Customers' },
+  // { path: 'notifications', icon: Bell, label: 'Notifications' },
 ];
 
 const AgentLayout = () => {
@@ -55,11 +53,6 @@ const AgentLayout = () => {
         userRole={userRole}
         onLogout={handleLogout}
         extraHeaderActions={createQuoteAction}
-      />
-
-      <CreateQuoteModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
       />
     </>
   );

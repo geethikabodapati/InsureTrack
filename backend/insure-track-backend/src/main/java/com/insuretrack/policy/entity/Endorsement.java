@@ -17,6 +17,7 @@ import java.time.LocalDate;
 public class Endorsement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name="endorsement_id")
     private Long enodrsementId;
     @ManyToOne
     @JoinColumn(name="policyId")
