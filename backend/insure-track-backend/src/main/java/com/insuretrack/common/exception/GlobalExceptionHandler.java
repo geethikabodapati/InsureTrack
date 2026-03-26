@@ -45,7 +45,6 @@ public class GlobalExceptionHandler {
                 .body("Something went wrong");
     }
 
-
 }
 //package com.insuretrack.common.exception;
 //

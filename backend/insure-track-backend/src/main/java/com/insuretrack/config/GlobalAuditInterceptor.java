@@ -19,8 +19,6 @@ public class GlobalAuditInterceptor implements HandlerInterceptor {
 
     private final AuditLogRepository auditLogRepository;
     private final UserRepository userRepository;
-
-    // We only log state-changing actions (POST, PUT, DELETE)
     private static final Set<String> AUDIT_METHODS = Set.of("POST", "PUT", "DELETE");
 
     @Override
