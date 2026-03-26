@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FileCheck, AlertCircle, RefreshCw, DollarSign } from "lucide-react";
+import { FileCheck, AlertCircle, RefreshCw, DollarSign, IndianRupee } from "lucide-react";
 import { settlementApi, claimsApi, reservesApi } from "../../../core/services/api";
 import { useNotifications } from "./NotificationContext";
 import '../styles/adjuster.css';
@@ -9,7 +9,7 @@ function badgeClass(s) {
     PENDING: "adj-badge adj-badge-investigating",
     PAID: "adj-badge adj-badge-settled",
     FAILED: "adj-badge adj-badge-denied",
-    SETTLED: "adj-badge adj-badge-open", // Claim is ready for payout
+    SETTLED: "adj-badge adj-badge-open",
   };
   return m[s] || "adj-badge adj-badge-closed";
 }
@@ -90,36 +90,51 @@ const setEmptyState = () => {
   useEffect(() => { loadClaims(); }, []);
  
   const handleSettle = async () => {
-    if (!selected) return;
-    const currentReserve = reserves.find(r => r.claimId === selected.claimId);
-    if (!currentReserve) return showToast("error", "⚠ No reserve allocated for this claim.");
-   
-    setLoading(true);
-    try {
-      const res = await settlementApi.create(selected.claimId, { settlementAmount: parseFloat(amount) });
-     
-      refresh();
-      showToast("success", "Settlement PENDING. Claim moved to pay queue.");
-     
-      // LOGIC: Remove from the sidebar list immediately (The "Vanish" Logic)
-      const updatedClaims = claims.filter(c => c.claimId !== selected.claimId);
-      setClaims(updatedClaims);
-     
-      if (updatedClaims.length > 0) {
-        selectClaim(updatedClaims[0]);
-      } else {
-        setSelected(null);
-        setSettlement(null);
-      }
-     
-      setAmount("");
-    } catch (err) {
-      showToast("error", err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!selected) return;
  
+  // 1. Get the current numeric value from the input
+  const settlementValue = parseFloat(amount);
+ 
+  // 2. Validation: Check if amount is valid and not exceeding reserves
+  if (!amount || settlementValue <= 0) {
+    return showToast("error", "Please enter a valid settlement amount.");
+  }
+ 
+  if (settlementValue > currentClaimReserves) {
+    // THIS IS THE TOAST MESSAGE YOU REQUESTED
+    return showToast(
+      "error",
+      `Total settlement cannot exceed the allocated reserve of $${currentClaimReserves.toLocaleString()}`
+    );
+  }
+ 
+  setLoading(true);
+  try {
+    const res = await settlementApi.create(selected.claimId, {
+      settlementAmount: settlementValue
+    });
+ 
+    refresh();
+    showToast("success", "Settlement PENDING. Claim moved to pay queue.");
+ 
+    // Vanish Logic
+    const updatedClaims = claims.filter(c => c.claimId !== selected.claimId);
+    setClaims(updatedClaims);
+ 
+    if (updatedClaims.length > 0) {
+      selectClaim(updatedClaims[0]);
+    } else {
+      setSelected(null);
+      setSettlement(null);
+    }
+ 
+    setAmount("");
+  } catch (err) {
+    showToast("error", err.message);
+  } finally {
+    setLoading(false);
+  }
+};
   const currentClaimReserves = reserves.filter(r => r.claimId === selected?.claimId).reduce((s, r) => s + (r.amount || 0), 0);
  
   return (
@@ -185,7 +200,7 @@ const setEmptyState = () => {
               </div>
  
               <div className={`adj-reserve-banner ${currentClaimReserves > 0 ? "has-reserve" : "no-reserve"}`}>
-                <DollarSign size={16} style={{ color: currentClaimReserves > 0 ? "#16a34a" : "#ea580c" }} />
+                <IndianRupee size={16} style={{ color: currentClaimReserves > 0 ? "#16a34a" : "#ea580c" }} />
                 <div>
                   <p className="adj-reserve-banner-title">{currentClaimReserves > 0 ? "✓ Reserve Allocated" : "⚠ No Reserve Found"}</p>
                   <p className="adj-reserve-banner-sub">Claim limit for settlement: <strong>₹{(currentClaimReserves || 0).toLocaleString()}</strong></p>
@@ -195,14 +210,30 @@ const setEmptyState = () => {
               <div className="adj-card">
                 <p className="adj-card-title">Initiate Settlement</p>
                 <div style={{ display: "flex", gap: 12 }}>
-                  <div className="adj-input-dollar" style={{ flex: 1 }}>
+                  <div  style={{ flex: 1 }}>
                     <span className="adj-input-dollar-sign">$</span>
                     <input type="number" value={amount} onChange={e => setAmount(e.target.value)}
                       placeholder={currentClaimReserves > 0 ? currentClaimReserves : "0.00"} className="adj-input" />
+                      {parseFloat(amount) > currentClaimReserves && (
+    <p style={{ color: '#ef4444', fontSize: '10px', marginTop: '4px', fontWeight: 'bold' }}>
+      ⚠ Exceeds Reserve Limit (Max: ₹{currentClaimReserves.toLocaleString()})
+    </p>
+  )}
                   </div>
-                  <button onClick={handleSettle} disabled={loading || currentClaimReserves === 0} className="adj-btn adj-btn-success">
+                 {/* <button onClick={handleSettle} disabled={loading || currentClaimReserves === 0} className="adj-btn adj-btn-success">
                     {loading ? "..." : "Create Settlement"}
-                  </button>
+                  </button>*/}
+                  <button
+  onClick={handleSettle}
+  disabled={
+    loading ||
+    currentClaimReserves === 0 ||
+    !amount // Still disable if the input is empty
+  }
+  className={`adj-btn ${parseFloat(amount) > currentClaimReserves ? 'adj-btn-error' : 'adj-btn-success'}`}
+>
+  {loading ? "..." : "Create Settlement"}
+</button>
                 </div>
               </div>
             </>
@@ -221,3 +252,4 @@ const setEmptyState = () => {
     </div>
   );
 }
+ 

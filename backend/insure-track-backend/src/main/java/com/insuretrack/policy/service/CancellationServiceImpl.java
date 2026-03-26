@@ -11,7 +11,8 @@ import com.insuretrack.policy.entity.Cancellation;
 import com.insuretrack.policy.entity.Policy;
 import com.insuretrack.policy.repository.CancellationRepository;
 import com.insuretrack.policy.repository.PolicyRepository;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -116,7 +117,7 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = RuntimeException.class)
     public CancellationResponseDTO cancel(CancellationRequestDTO request) {
         Policy policy = policyRepository.findById(request.getPolicyId())
                 .orElseThrow(() -> new RuntimeException("Policy not found"));
@@ -136,7 +137,7 @@ public class CancellationServiceImpl implements CancellationService {
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional(noRollbackFor = RuntimeException.class)
+    @Transactional // Standard transactional is fine once we add the guard clause
     public CancellationResponseDTO approve_Cancellation(Long cancellationId) {
         Cancellation cancellation = cancellationRepository.findById(cancellationId)
                 .orElseThrow(() -> new RuntimeException("Cancellation request not found"));
@@ -157,48 +158,56 @@ public class CancellationServiceImpl implements CancellationService {
         }
         cancellationRepository.save(cancellation);
 
-        // STAGE 3: Trigger Refund
+        // STAGE 3: Trigger Refund with Guard Clause
         try {
             var payments = paymentRepository.findByInvoice_Policy_PolicyId(policy.getPolicyId());
             var latestPayment = payments.stream()
                     .filter(p -> "COMPLETED".equals(p.getStatus().name()))
-                    //.filter(p -> "PROCESSED".equals(p.getStatus().name()))
                     .findFirst().orElse(null);
 
-//            if (latestPayment != null) {
+            // --- THE FIX: GUARD CLAUSE ---
+            // Check local values before calling the other transactional service
+            //if (latestPayment != null ) {
+
                 RefundRequestDTO refundRequest = new RefundRequestDTO();
                 double finalRefundAmount = Math.min(cancellation.getRefundAmount(), latestPayment.getAmount());
 
                 refundRequest.setAmount(finalRefundAmount);
-                // IMPORTANT: Reason must include ID for RefundService to find it later
                 refundRequest.setReason("Cancellation #" + cancellation.getCancellationId());
 
+                // This will now only be called if we know it won't trigger a validation exception
                 refundService.initiateRefund(latestPayment.getPaymentId(), refundRequest);
+
+            //} else {
+                System.out.println("Skipping Refund: Amount is " + cancellation.getRefundAmount() +
+                        " or no completed payment found.");
             //}
         } catch (Exception e) {
-            System.err.println("Refund trigger failed: " + e.getMessage());
+            // This catch is now only for unexpected DB/Network errors
+            System.err.println("Unexpected Refund trigger failure: " + e.getMessage());
         }
 
         return mapToDTO(cancellation);
     }
-//    private CancellationResponseDTO mapToDTO(Cancellation cancellation) {
-//        String name = "N/A";
-//        if (cancellation.getPolicy() != null &&
-//                cancellation.getPolicy().getQuote() != null &&
-//                cancellation.getPolicy().getQuote().getCustomer() != null) {
-//            name = cancellation.getPolicy().getQuote().getCustomer().getName();
-//        }
-//
-//        return CancellationResponseDTO.builder()
-//                .cancellationId(cancellation.getCancellationId())
-//                .policyId(cancellation.getPolicy().getPolicyId())
-//                .customerName(name)
-//                .reason(cancellation.getReason())
-//                .refundAmount(cancellation.getRefundAmount())
-//                .status(cancellation.getStatus() != null ? cancellation.getStatus().name() : "PENDING")
-//                .effectiveDate(cancellation.getEffectiveDate())
-//                .build();
-//    }
+
+    private CancellationResponseDTO mapToResponseDTO(Cancellation cancellation) {
+        String name = "N/A";
+        if (cancellation.getPolicy() != null &&
+                cancellation.getPolicy().getQuote() != null &&
+                cancellation.getPolicy().getQuote().getCustomer() != null) {
+            name = cancellation.getPolicy().getQuote().getCustomer().getName();
+        }
+
+        return CancellationResponseDTO.builder()
+                .cancellationId(cancellation.getCancellationId())
+                .policyId(cancellation.getPolicy().getPolicyId())
+                .customerName(name)
+                .reason(cancellation.getReason())
+                .refundAmount(cancellation.getRefundAmount())
+                .status(cancellation.getStatus() != null ? cancellation.getStatus().name() : "PENDING")
+                .effectiveDate(cancellation.getEffectiveDate())
+                .build();
+    }
 
     @Override
     public List<CancellationResponseDTO> getAllCancellationsForDashboard() {

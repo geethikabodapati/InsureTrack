@@ -87,7 +87,6 @@ export const updateRenewalStatusApi = (id, status) =>
 export const fetchAgentCancellations = () => API.get('/agent/cancellation');
 // export const approveCancellation = (id) => API.put(`/agent/cancellation/${id}/approve`);
 export const approveCancellation = (id) => API.put(`/${id}/approve`);
- 
 //Adjuster
 export const customerClaimsApi = {
     fileClaim: (dto) => API.post("/customer/claims", dto),

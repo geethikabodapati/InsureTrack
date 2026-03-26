@@ -16,10 +16,9 @@ const DashboardHome = () => {
 
     return (
         <div>
-            <Overview /> {/* Stats cards here */}
+            <Overview />
 
             <div className="row g-4 mt-2">
-                {/* RECENT CLAIMS */}
                 <div className="col-md-6">
                     <div className="card border-0 shadow-sm p-4">
                         <div className="d-flex justify-content-between align-items-center mb-4">

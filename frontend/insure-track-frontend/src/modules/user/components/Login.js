@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Shield, Eye, EyeOff } from "lucide-react";
 import { login } from '../../../core/services/api';
-import '../../../styles/user.css';
+import '../styles/user.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');

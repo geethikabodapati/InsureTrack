@@ -3,7 +3,7 @@ import { getAllCustomers, updateCustomer } from '../../../core/services/api';
 
 const MyProfile = () => {
     const [profile, setProfile] = useState({ 
-        name: '', dob: '', contactInfo: '', segment: 'RETAIL', status: 'INACTIVE' 
+        name: '', dob: '', contactInfo: '', segment: 'CORPORATE', status: 'INACTIVE' 
     });
     const [isExistingCustomer, setIsExistingCustomer] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -13,34 +13,33 @@ const MyProfile = () => {
     const userId = userData?.userId || userData?.id;
 
     const loadProfile = useCallback(async () => {
-    if (!userId) return;
-    try {
-        setLoading(true);
-        const res = await getAllCustomers();
-        const myData = res.data.find(c => parseInt(c.userId || c.user?.id) === parseInt(userId));
+        if (!userId) return;
+        try {
+            setLoading(true);
+            const res = await getAllCustomers();
+            const myData = res.data.find(c => parseInt(c.userId || c.user?.id) === parseInt(userId));
 
-        if (myData) {
-            setProfile(myData);
-            setIsExistingCustomer(true);
-            localStorage.setItem("customerId", myData.customerId);
-            console.log(myData.customerId);
-            
-            // SECURITY: If the DB says INACTIVE, force the lock in storage
-            if (myData.status === 'ACTIVE') {
-                localStorage.setItem("customerStatus", "ACTIVE");
+            if (myData) {
+                setProfile(myData);
+                setIsExistingCustomer(true);
+                localStorage.setItem("customerId", myData.customerId);
+                
+                const status = myData.status === 'ACTIVE' ? "ACTIVE" : "INACTIVE";
+                localStorage.setItem("customerStatus", status);
             } else {
+                // NEW USER: No record in DB yet
+                setIsExistingCustomer(false);
                 localStorage.setItem("customerStatus", "INACTIVE");
             }
-        } else {
-            // No record found at all? Keep it locked.
+            // Trigger layout update
+            window.dispatchEvent(new Event("storage")); 
+        } catch (err) {
+            console.error("Fetch Error", err);
             localStorage.setItem("customerStatus", "INACTIVE");
+        } finally {
+            setLoading(false);
         }
-    } catch (err) {
-        console.error("Fetch Error", err);
-    } finally {
-        setLoading(false);
-    }
-}, [userId]);
+    }, [userId]);
 
     useEffect(() => { loadProfile(); }, [loadProfile]);
 
@@ -53,30 +52,14 @@ const MyProfile = () => {
                 const cid = profile.customerId || localStorage.getItem("customerId");
                 await updateCustomer(cid, updatePayload);
                 
-                // UNLOCK LOGIC for Update
                 localStorage.setItem("customerStatus", "ACTIVE");
-                window.dispatchEvent(new Event("storage")); // Trigger Layout update
+                window.dispatchEvent(new Event("storage")); 
                 
                 alert("Profile Updated & System Unlocked!");
-            // } else {
-            //     const response = await createCustomer(userId, updatePayload);
-            //     const newId = response.data.customerId;
-                
-            //     if (newId) {
-            //         // 1. Update Storage with the keys the Layout is watching
-            //         localStorage.setItem("customerId", newId);
-            //         localStorage.setItem("customerStatus", "ACTIVE");
-                    
-            //         const updatedUser = { ...userData, role: 'CUSTOMER' }; 
-            //         localStorage.setItem("user", JSON.stringify(updatedUser));
-
-            //         // 2. TRIGGER THE SIGNAL
-            //         window.dispatchEvent(new Event("storage")); 
-            //     }
-
-                alert("Account Activated! All sections are now open.");
-                setIsExistingCustomer(true);
                 loadProfile(); 
+            } else {
+                // Logic for createCustomer would go here if needed
+                alert("Account record not found. Please contact admin.");
             }
         } catch (err) {
             console.error("Submit Error:", err);
@@ -95,6 +78,11 @@ const MyProfile = () => {
                         {profile.status || 'INCOMPLETE'}
                     </span>
                 </div>
+                {!isExistingCustomer && (
+                    <div className="alert alert-info py-2 small">
+                        Please complete your details to unlock the dashboard.
+                    </div>
+                )}
                 <form onSubmit={handleSubmit} className="row g-3">
                     <div className="col-md-6">
                         <label className="form-label fw-bold small">Full Name</label>

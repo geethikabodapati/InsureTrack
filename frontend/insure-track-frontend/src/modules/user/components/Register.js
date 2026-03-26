@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus, Eye, EyeOff } from "lucide-react";
 import { register } from '../../../core/services/api';
-import '../../../styles/user.css';
+import '../styles/user.css';
 
 const Register = () => {
     const [formData, setFormData] = useState({

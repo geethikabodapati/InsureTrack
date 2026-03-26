@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
-import '../../../styles/user.css';
+import '../styles/user.css';
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');

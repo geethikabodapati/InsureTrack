@@ -1,6 +1,9 @@
 package com.insuretrack.claims.controller;
 
+import com.insuretrack.billing.entity.Payment;
+import com.insuretrack.billing.repository.PaymentRepository;
 import com.insuretrack.claims.dto.*;
+import com.insuretrack.claims.entity.Claim;
 import com.insuretrack.claims.repository.ClaimRepository;
 import com.insuretrack.claims.repository.ReserveRepository;
 import com.insuretrack.claims.repository.SettlementRepository;
@@ -33,6 +36,7 @@ public class ClaimController {
     private final PolicyRepository policyRepository;
     private final ReserveRepository reserveRepository;
     private final SettlementRepository settlementRepository;
+    private final PaymentRepository paymentRepository;
 
     @PutMapping("/{id}/review")
     public ClaimResponseDTO review(@PathVariable Long id) {
@@ -206,13 +210,27 @@ public class ClaimController {
     public ClaimResponseDTO createClaim(@RequestBody ClaimRequestDTO dto) {
 
         // ── Change 4: Block if this policy has any open/active claims ──────
-        List<com.insuretrack.claims.entity.Claim> existingClaims =
-                claimRepository.findByPolicyPolicyId(dto.getPolicyId());
+        // 1. Fetch payments
+        List<Payment> payments = paymentRepository.findPaymentsByPolicyId(dto.getPolicyId());
 
+// 2. Check if at least one payment is COMPLETED
+        boolean hasCompletedPayment = payments.stream()
+                .anyMatch(p -> "COMPLETED".equalsIgnoreCase(p.getStatus().toString())); // Or p.getStatus() == PaymentStatus.COMPLETED
+
+// 3. Validation
+        if (!hasCompletedPayment) {
+            throw new RuntimeException("You must have at least one completed payment to file a claim.");
+        }
+
+// 4. Check for existing active claims (Your existing logic)
+        List<Claim> existingClaims = claimRepository.findByPolicyPolicyId(dto.getPolicyId());
         boolean hasActiveClaim = existingClaims.stream().anyMatch(c ->
-                c.getStatus() != ClaimStatus.CLOSED &&
-                        c.getStatus() != ClaimStatus.DENIED
+                c.getStatus() != ClaimStatus.CLOSED && c.getStatus() != ClaimStatus.DENIED
         );
+
+        if (hasActiveClaim) {
+            throw new RuntimeException("An active claim already exists for this policy.");
+        }
 
         if (hasActiveClaim) {
             throw new RuntimeException(

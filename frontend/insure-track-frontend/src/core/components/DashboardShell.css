@@ -529,8 +529,31 @@ body.dark .it-user-dropdown {
 }
 
 /* If you add a 'disabled' property to your nav items later */
-.it-nav-link.disabled {
+.it-nav-link.locked{
     opacity: 0.5;
     pointer-events: none;
     filter: grayscale(1);
 }
+
+/* Styling for locked navigation items */
+ .it-nav-link.it-nav-locked {
+  background-color: #FFFFFF;
+  color: #000000 !important; 
+  pointer-events: none;      
+}
+
+.it-nav-link.it-nav-locked:hover {
+  background: transparent !important;
+}
+
+.it-lock-icon {
+  color: #756969;
+  opacity: 0.8;
+}
+
+
+.dark .it-nav-link.it-nav-locked {
+  color: #000000 !important;
+}
+
+/* Styling for locked navigation items in your layout */
