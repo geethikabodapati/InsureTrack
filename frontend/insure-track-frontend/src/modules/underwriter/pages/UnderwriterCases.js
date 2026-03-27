@@ -76,8 +76,8 @@ const UnderwritingCases = () => {
                 <td>{item.uwCaseId}</td>
                 <td>{item.customerName}</td>
                 <td>
-                  <span className={`badge-score ${item.riskScore >= 1 ? 'high' : 'low'}`}>
-                    {item.riskScore  >= 1 ? 'High' : 'Low' || 0}
+                  <span className={`badge-score ${item.riskScore >= 3 ? 'high' : 'low'}`}>
+                    {item.riskScore  >= 3 ? 'High' : 'Low' || 0}
                   </span>
                 </td>
                 <td>

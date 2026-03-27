@@ -6,10 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="3169d71c-de01-4cc9-9f42-35d2f15425e0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/common/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/common/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/config/GlobalAuditInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/config/GlobalAuditInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/test/java/com/insuretrack/insure_track_backend/underwriting/UnderwriterServiceImplTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/common/enums/ObjectType.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/common/enums/ObjectType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/entity/UnderwritingCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/entity/UnderwritingCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/service/UnderwritingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/service/UnderwritingServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/admin/styles/AdminTables.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/admin/styles/AdminTables.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/UnderwriterCases.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/UnderwriterCases.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/insuretrack.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/insuretrack.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

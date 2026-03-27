@@ -87,7 +87,21 @@ public class PaymentServiceImpl implements PaymentService {
                 .map(this::mapToResponse)
                 .toList();
     }
+    @Override
+    public PaymentResponseDTO createPendingPayment(Long invoiceId, Double amount) {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Invoice not found"));
 
+        Payment pendingPayment = Payment.builder()
+                .invoice(invoice)
+                .amount(amount)
+                .paidDate(null) // Not paid yet
+                .status(PaymentStatus.PENDING) // Set status to PENDING
+                .build();
+
+        paymentRepository.save(pendingPayment);
+        return mapToResponse(pendingPayment);
+    }
     private PaymentResponseDTO mapToResponse(Payment payment) {
 
         return PaymentResponseDTO.builder()

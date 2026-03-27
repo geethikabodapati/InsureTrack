@@ -9,7 +9,7 @@ import java.util.List;
 public interface PaymentService {
     PaymentResponseDTO makePayment(Long invoiceId, PaymentRequestDTO dto);
     List<PaymentResponseDTO> getPayments(Long invoiceId);
-
+    PaymentResponseDTO createPendingPayment(Long invoiceId, Double amount);
     // ✅ new method
     List<PaymentResponseDTO> getAllPaymentsWithCustomer();
 }

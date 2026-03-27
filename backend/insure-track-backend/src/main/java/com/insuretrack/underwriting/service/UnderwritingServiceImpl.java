@@ -2,6 +2,7 @@ package com.insuretrack.underwriting.service;
 
 import com.insuretrack.billing.dto.InvoiceRequestDTO;
 import com.insuretrack.billing.service.InvoiceService;
+import com.insuretrack.billing.service.PaymentService;
 import com.insuretrack.common.enums.NotificationCategory;
 import com.insuretrack.common.enums.QuoteStatus;
 import com.insuretrack.common.enums.UnderwritingDecision;
@@ -40,6 +41,7 @@ public class UnderwritingServiceImpl implements UnderwritingService {
     private final InvoiceService invoiceService;
     private final NotificationService notificationService;
     private final AuditLogRepository auditLogRepository;
+    private final PaymentService paymentService;
 
     @Override
     public UnderwritingResponseDTO createCase(Long quoteId) {
@@ -113,7 +115,9 @@ public class UnderwritingServiceImpl implements UnderwritingService {
                     .dueDate(LocalDate.now().plusDays(30))
                     .build();
 
-            invoiceService.createInvoice(policyResponse.getPolicyId(), invoiceRequest);
+            var invoiceResponse = invoiceService.createInvoice(policyResponse.getPolicyId(), invoiceRequest);
+            paymentService.createPendingPayment(invoiceResponse.getInvoiceId(), monthlyAmount);
+
         } else {
             quote.setStatus(QuoteStatus.REJECTED);
         }

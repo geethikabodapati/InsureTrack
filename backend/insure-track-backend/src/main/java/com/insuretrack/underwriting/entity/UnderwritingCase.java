@@ -23,8 +23,9 @@ public class UnderwritingCase {
     @JoinColumn(name="quoteId")
     private Quote quote;
     @ManyToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name = "underwriter_id")
     private User underwriter;
+
     private String riskAssessment;
     @Enumerated(EnumType.STRING)
     private UnderwritingDecision decision;
