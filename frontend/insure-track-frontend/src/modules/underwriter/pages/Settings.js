@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as XLSX from 'xlsx'; // Import for Excel Export
+import * as XLSX from 'xlsx';
 import { getUserProfile, updateUserProfile, getUAuditLogs } from '../../../../src/core/services/api.js';
 import { 
   User, CheckCircle, Loader2, Key, History, 
@@ -22,7 +22,6 @@ const Settings = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
 
-  // Helper to extract username safely from localStorage
   const getUsernameFromStorage = () => {
     try {
       const userStr = localStorage.getItem('user');
@@ -87,14 +86,12 @@ const Settings = () => {
     setShowLogs(!showLogs);
   };
 
-  // --- EXPORT TO EXCEL LOGIC ---
   const handleExportExcel = () => {
     if (auditLogs.length === 0) {
       alert("No data to export. Please load logs first.");
       return;
     }
 
-    // Map data to clean headers for the Excel Sheet
     const dataToExport = auditLogs.map(log => ({
       "User": getUsernameFromStorage(),
       "Action Performed": log.action,
@@ -103,12 +100,12 @@ const Settings = () => {
       "Status": "SUCCESS"
     }));
 
-    // Create worksheet and workbook
+
     const ws = XLSX.utils.json_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "AuditTrail");
 
-    // Download the file
+
     XLSX.writeFile(wb, `Underwriter_Audit_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
@@ -128,7 +125,6 @@ const Settings = () => {
       )}
 
       <div className="settings-grid">
-        {/* Card 1: Personal Identity */}
         <div className="settings-card">
           <div className="card-header-flex">
             <div className="title-group">
@@ -157,7 +153,6 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* Card 2: Security & Access */}
         <div className="settings-card">
           <div className="card-header-flex">
             <div className="title-group">
@@ -178,15 +173,12 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* Card 3: Audit Logs (Full Width) */}
         <div className="settings-card full-width full-bleed-card">
           <div className="card-header-flex align-center">
             <div className="title-group">
               <h3>System Audit Trail</h3>
             </div>
             <div className="header-right-actions" style={{ display: 'flex', gap: '12px' }}>
-              
-              {/* Export Button Added Here */}
               <button 
                 className="outline-btn export-btn" 
                 onClick={handleExportExcel}

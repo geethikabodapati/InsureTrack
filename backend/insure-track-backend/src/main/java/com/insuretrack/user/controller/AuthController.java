@@ -2,9 +2,11 @@ package com.insuretrack.user.controller;
 
 import com.insuretrack.user.dto.LoginRequestDTO;
 import com.insuretrack.user.entity.AuditLog;
+import com.insuretrack.user.entity.User;
 import com.insuretrack.user.service.AuthService;
 import com.insuretrack.user.dto.UserRequestDTO;
 import com.insuretrack.user.dto.UserResponseDTO;
+import com.insuretrack.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(
@@ -58,6 +61,10 @@ public class AuthController {
     @GetMapping("/auditlogs")
     public ResponseEntity<List<AuditLog>> getAuditLogs() {
         return ResponseEntity.ok(authService.getAllAuditLogs());
+    }
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 }
 

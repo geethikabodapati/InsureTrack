@@ -18,7 +18,6 @@ const Reports = () => {
         const response = await getDashboardStats();
         setStats(response.data);
         setLoading(false);
-        // Trigger entrance animation after data loads
         setTimeout(() => setIsVisible(true), 100);
       } catch (err) {
         setLoading(false);
@@ -27,7 +26,6 @@ const Reports = () => {
     fetchStats();
   }, []);
 
-  // Data Transformation: Cases by Product
   const productData = useMemo(() => {
     if (!stats?.productDistribution) return [];
     return Object.entries(stats.productDistribution).map(([name, count]) => ({
@@ -36,7 +34,6 @@ const Reports = () => {
     }));
   }, [stats]);
 
-  // Data Transformation: Decision Breakdown
   const decisionData = useMemo(() => [
     { name: 'Approved', value: Number(stats?.approved || 0), color: '#10b981' },
     { name: 'Declined', value: Number(stats?.declined || 0), color: '#ef4444' },
@@ -56,14 +53,12 @@ const Reports = () => {
 
       <div className="reports-dual-grid">
         
-        {/* Visual 1: Product Volume */}
         <div className="report-card animated-card">
           <div className="card-header-flex">
             <div className="title-group">
               <h3>Product Distribution</h3>
               <span className="badge-pill volume">Volume</span>
             </div>
-            {/* Icon positioned top-right */}
             <div className="icon-wrapper bg-blue-soft">
                <ShieldCheck size={20} className="text-blue" />
             </div>
@@ -95,14 +90,12 @@ const Reports = () => {
           </div>
         </div>
 
-        {/* Visual 2: Outcome Ratio */}
         <div className="report-card animated-card">
           <div className="card-header-flex">
             <div className="title-group">
               <h3>Decision Outcomes</h3>
               <span className="badge-pill ratio">Ratio</span>
             </div>
-            {/* Icon positioned top-right */}
             <div className="icon-wrapper bg-indigo-soft">
                 <Activity size={20} className="text-indigo" />
             </div>
@@ -135,7 +128,6 @@ const Reports = () => {
 
       </div>
 
-      {/* Detailed Data Table */}
       <div className="report-card full-width-table animated-card delay-3">
         <div className="card-header-flex">
           <div className="title-group">

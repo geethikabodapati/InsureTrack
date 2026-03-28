@@ -26,7 +26,7 @@ export const register = (userData) => API.post('/auth/register', userData);
 export const forgotPassword = (email) => API.post('/auth/forgot-password', { email });
 export const resetPassword = (token, newPassword) =>
     API.post(`/auth/reset-password?token=${token}`, { password: newPassword });
-
+export const getCountofUsers = () => API.get('/auth/users');
 // Underwriter Services
 export const getAllCases = () => API.get('/underwriter/all');
 export const getPendingCases = () => API.get('/underwriter/pending');

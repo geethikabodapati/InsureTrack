@@ -12,9 +12,8 @@ const ResetPassword = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     
-    // Get parameters from URL
     const token = searchParams.get("token");
-    const returnTo = searchParams.get("returnTo"); // e.g., "/underwriter/settings"
+    const returnTo = searchParams.get("returnTo"); // "/underwriter/settings"
 
     const handleReset = async (e) => {
         e.preventDefault();
@@ -26,17 +25,13 @@ const ResetPassword = () => {
         }
 
         try {
-            // Note: Ensure the port matches your Auth Service (8082 in your previous snippet)
             const response = await axios.post(`http://localhost:8082/api/auth/reset-password?token=${token}`, {
-                email: "", // Not needed if token is valid
+                email: "", 
                 password: password 
             });
             
             if (response.status === 200) {
                 alert("Password updated successfully!");
-                
-                // If returnTo exists, go back to the specific dashboard. 
-                // Otherwise (from email link), go to login.
                 if (returnTo) {
                     navigate(decodeURIComponent(returnTo));
                 } else {

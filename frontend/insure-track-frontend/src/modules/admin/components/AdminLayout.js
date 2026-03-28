@@ -18,7 +18,7 @@ const ADMIN_NAV = [
     { path: "admin-rules", label: "Rating Rules", icon: Calculator },
     { path: "admin-users", label: "Users", icon: Users },
     { path: "admin-logs", label: "Audit Logs", icon: History },
-    { path: "admin-settings", label: "Settings", icon: Settings }
+    // { path: "admin-settings", label: "Settings", icon: Settings }
 ];
 
 const AdminLayout = () => {

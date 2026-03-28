@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, Legend, Label // Added Label
+  PieChart, Pie, Cell, Legend, Label 
 } from 'recharts';
-// New Icons
 import { FiFileText, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import { getDashboardStats, getAllCases } from '../../../core/services/api.js';
 import '../styles/underwriter.css';
 
 const Dashboard = () => {
-  // ... (keeping your existing state and useEffect logic)
   const [stats, setStats] = useState({
     totalProposals: 0,
     pendingReview: 0,
@@ -88,7 +86,6 @@ const Dashboard = () => {
         <p>Overview of underwriting activities</p>
       </header>
 
-      {/* Stat Cards with React Icons */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-info">
@@ -157,11 +154,11 @@ const Dashboard = () => {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={riskData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              {/* X-Axis with Name */}
+          
               <XAxis dataKey="range">
                 <Label value="Risk Score Range" offset={-10} position="insideBottom" />
               </XAxis>
-              {/* Y-Axis with Name */}
+              
               <YAxis>
                 <Label value="Number of Cases" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
               </YAxis>
@@ -171,7 +168,6 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* ... Recent Activity stays the same ... */}
         <div className="chart-box scrollable-box">
           <h3>Recent Activity</h3>
           <div className="activity-list">

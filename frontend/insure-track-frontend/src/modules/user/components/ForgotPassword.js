@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { forgotPassword } from '../../../core/services/api';
 import { Link } from 'react-router-dom';
-import { KeyRound, MailCheck, AlertCircle } from "lucide-react"; // npm install lucide-react
+import { KeyRound, MailCheck, AlertCircle } from "lucide-react"; 
 import '../styles/user.css';
 
 const ForgotPassword = () => {

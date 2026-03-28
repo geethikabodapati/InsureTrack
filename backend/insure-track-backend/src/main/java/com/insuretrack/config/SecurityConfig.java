@@ -37,18 +37,18 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/risk/**","/docs/**").permitAll()
-                        .requestMatchers("/api/admin/products/allproducts").hasAnyRole("ADMIN", "CUSTOMER")
-                        .requestMatchers("/api/adjuster/claims/submit","/api/adjuster/claims/customers/**").hasAnyRole("CUSTOMER", "ADJUSTER")
+                        .requestMatchers("/api/auth/**", "/api/risk/**","/docs/**","/api/agent/policies").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                       // .requestMatchers("/api/agent/quotes/customer/**","/api/agent/policies/customer/{customerId}").hasAnyRole("AGENT","CUSTOMER")
-                        .requestMatchers( "/api/customers/endorsements/**","/api/agent/quotes/customers/**","/api/agent/policies/customers/{customerId}","/api/agent/quotes/draft").hasAnyRole("AGENT", "CUSTOMER")
-                        .requestMatchers("/api/analyst/billing/**").hasAnyRole("ANALYST", "AGENT", "CUSTOMER")
-                        .requestMatchers("/api/agent/**","/api/customers/update/insuredobj/**").hasRole("AGENT")
                         .requestMatchers("/api/underwriter/**").hasRole("UNDERWRITER")
-                        .requestMatchers("/api/adjuster/**").hasAnyRole("ADJUSTER", "ANALYST","ADMIN")
-                        .requestMatchers("/api/analyst/**","/api/{id}/approve").hasAnyRole("ANALYST", "ADMIN","AGENT")
+                        .requestMatchers("/api/agent/**","/api/customers/update/insuredobj/**").hasRole("AGENT")
+                        .requestMatchers("/api/analyst/**").hasRole("ANALYST")
                         .requestMatchers("/api/customers/**").hasRole("CUSTOMER")
+                        .requestMatchers("/api/admin/products/allproducts").hasAnyRole("ADMIN", "CUSTOMER")
+                        .requestMatchers("/api/analyst/billing/**").hasAnyRole("ANALYST", "AGENT", "CUSTOMER")
+                        .requestMatchers("/api/adjuster/**").hasAnyRole("ADJUSTER", "ANALYST")
+                        .requestMatchers("/api/{id}/approve").hasAnyRole("ANALYST","AGENT")
+                        .requestMatchers("/api/adjuster/claims/submit","/api/adjuster/claims/customers/**").hasAnyRole("CUSTOMER", "ADJUSTER")
+                        .requestMatchers( "/api/customers/endorsements/**","/api/agent/quotes/customers/**","/api/agent/policies/customers/{customerId}","/api/agent/quotes/draft").hasAnyRole("AGENT", "CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -57,7 +57,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ADD THIS BEAN TO ALLOW REACT (PORT 3000)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

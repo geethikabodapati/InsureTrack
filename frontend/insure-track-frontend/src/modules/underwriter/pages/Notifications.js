@@ -6,15 +6,17 @@ const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    // Retrieve userId from localStorage safely
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user?.userId;
+
+    const unreadCount = useMemo(() => {
+        return notifications.filter(n => n.status === 'UNREAD').length;
+    }, [notifications]);
 
     const fetchNotifications = useCallback(async () => {
         if (!userId) return;
         try {
             const response = await getUserNotifications(userId);
-            // Axios returns data in response.data
             setNotifications(response.data || response);
         } catch (error) {
             console.error("Error fetching notifications", error);
@@ -41,7 +43,6 @@ const Notifications = () => {
     const handleDismiss = async (id) => {
         try {
             await dismissNotification(id);
-            // UPDATE: Instead of filtering, we change the status locally
             setNotifications(prev => prev.map(n => 
                 n.notificationId === id ? { ...n, status: 'DISMISSED' } : n
             ));
@@ -50,12 +51,10 @@ const Notifications = () => {
         }
     };
 
-    // Logic to sort: Unread first, then Read, then Dismissed at the very bottom
     const sortedNotifications = useMemo(() => {
         return [...notifications].sort((a, b) => {
             if (a.status === 'DISMISSED' && b.status !== 'DISMISSED') return 1;
             if (a.status !== 'DISMISSED' && b.status === 'DISMISSED') return -1;
-            // Secondary sort: Newest date first
             return new Date(b.createdDate) - new Date(a.createdDate);
         });
     }, [notifications]);
@@ -76,7 +75,12 @@ const Notifications = () => {
     return (
         <div className="notifications-page">
             <div className="notifications-header">
-                <h2>Notifications</h2>
+                <div className="title-row">
+                    <h2>Notifications</h2>
+                    {unreadCount > 0 && (
+                        <span className="unread-count-badge">{unreadCount}</span>
+                    )}
+                </div>
                 <p>Stay updated with your latest underwriting tasks</p>
             </div>
 

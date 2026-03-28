@@ -58,7 +58,6 @@ const LookUpCase = () => {
 
   return (
     <div className="assessment-container">
-      {/* Navigation & Search Header */}
       <div className="search-header-card">
         <div className="header-top-row">
           <button 
@@ -77,7 +76,6 @@ const LookUpCase = () => {
     value={searchInput}
     onChange={(e) => setSearchInput(e.target.value)}
   />
-  {/* Updated Button Below */}
   <button type="submit" aria-label="Search">
     <Search size={18} />
   </button>

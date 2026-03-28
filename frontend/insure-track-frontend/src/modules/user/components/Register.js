@@ -20,30 +20,21 @@ const Register = () => {
     const validate = () => {
         let tempErrors = {};
         
-        // Name validation (Not null or just whitespace)
         if (!formData.name || formData.name.trim().length === 0) {
             tempErrors.name = "Full Name is required";
         }
 
-        // Gmail only validation
         if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(formData.email)) {
             tempErrors.email = "Only @gmail.com addresses are allowed";
         }
 
-        // Indian Phone Number validation
         if (!/^[6-9]\d{9}$/.test(formData.phone)) {
             tempErrors.phone = "Enter a valid 10-digit phone number";
         }
-
-        /** * Password Regex Validation:
-         * - At least 8 characters
-         * - At least one uppercase letter
-         * - At least one number
-         * - At least one special character (@$!%*?&)
-         */
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        ///^(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
         if (!passwordRegex.test(formData.password)) {
-            tempErrors.password = "Password must be 8+ chars with 1 uppercase, 1 number, and 1 special char";
+            tempErrors.password = "Password must be 6+ chars with 1 uppercase, 1 number, and 1 special char";
         }
 
         if (formData.password !== formData.confirmPassword) {

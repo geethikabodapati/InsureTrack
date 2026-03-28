@@ -6,13 +6,22 @@
   <component name="ChangeListManager">
     <list default="true" id="3169d71c-de01-4cc9-9f42-35d2f15425e0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/billing/service/PaymentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/common/enums/ObjectType.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/common/enums/ObjectType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/entity/UnderwritingCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/entity/UnderwritingCase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/service/UnderwritingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/underwriting/service/UnderwritingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/admin/styles/AdminTables.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/admin/styles/AdminTables.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/user/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/insure-track-backend/src/main/java/com/insuretrack/user/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/core/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/core/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/admin/components/AdminLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/admin/components/AdminLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/LookUpCase.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/LookUpCase.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Notifications.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Notifications.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Reports.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/Settings.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/UnderwriterCases.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/pages/UnderwriterCases.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/styles/underwriter.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/underwriter/styles/underwriter.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/ForgotPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/ForgotPassword.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/Register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/ResetPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/insure-track-frontend/src/modules/user/components/ResetPassword.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/insuretrack.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/insuretrack.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,5 +82,16 @@
       <updated>1774283610444</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

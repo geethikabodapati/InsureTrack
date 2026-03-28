@@ -266,7 +266,47 @@ h3 {
   display: flex;
   align-items: center;
 }
+.pagination-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f9fafb;
+    border-top: 1px solid #eee;
+    font-size: 0.9rem;
+}
 
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-btn {
+    padding: 5px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.page-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.page-btn:not(:disabled):hover {
+    background: #f0f0f0;
+    border-color: #bbb;
+}
+
+.current-page-num {
+    font-weight: 600;
+    color: #444;
+}
 .back-link-btn {
   display: flex;
   align-items: center;
@@ -1141,6 +1181,46 @@ input:checked + .slider:before {
 
 .notification-item.dismissed:hover {
     opacity: 0.9; /* Peek back at archived items on hover */
+}
+
+/* Container for Title and Badge */
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between "Notifications" and the number */
+    margin-bottom: 4px;
+}
+
+/* The Notification Number Badge */
+.unread-count-badge {
+    background-color: #e53935; /* Professional red */
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 2px 12px;
+    border-radius: 50px; /* Pill shape */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 24px;
+    box-shadow: 0 2px 5px rgba(229, 57, 53, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Ensure the header text doesn't have a bottom margin that breaks the flex alignment */
+.notifications-header h2 {
+    margin: 0;
+}
+
+/* Simple transition for smooth removal when items are read */
+.notification-item {
+    transition: all 0.3s ease;
 }
 
 .archived-tag {
